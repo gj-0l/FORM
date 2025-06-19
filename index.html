@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استمارة الفحص والتدريب</title>
+  <style>
+    body {
+      font-family: 'Tahoma', sans-serif;
+      background-color: #f0fdf4;
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #15803d;
+    }
+    .options {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .options button {
+      flex: 1;
+      padding: 10px;
+      margin: 0 5px;
+      background-color: #15803d;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .form-section {
+      display: none;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #065f46;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 5px;
+    }
+    .btn-print {
+      margin-top: 20px;
+      background-color: #065f46;
+      color: white;
+      padding: 10px;
+      border: none;
+      width: 100%;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #qr {
+      text-align: center;
+      margin-top: 20px;
+    }
+    canvas {
+      margin-top: 10px;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #qr, #qr * {
+        visibility: visible;
+      }
+      #qr {
+        position: absolute;
+        top: 30%;
+        left: 25%;
+        width: 50%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>نظام الفحص والتدريب</h2>
+    <div class="options">
+      <button onclick="showForm('line1')">الخط الأول</button>
+      <button onclick="showForm('line2')">الخط الثاني</button>
+    </div>
+
+    <form id="line1" class="form-section">
+      <label>الاسم</label>
+      <input type="text" id="name1">
+
+      <label>اسم الشركة</label>
+      <input type="text" id="company1">
+
+      <label>العمر</label>
+      <input type="number" id="age1">
+
+      <label>تأريخ الفحص</label>
+      <input type="date" id="testDate1">
+
+      <label>نوع الفحص</label>
+      <select id="testType1">
+        <option>فحص العمل في المرتفعات</option>
+        <option>فحص المناطق الضيقة</option>
+        <option>فحص عادي</option>
+      </select>
+
+      <label>تأريخ تدريب السلامة</label>
+      <input type="date" id="trainingDate1">
+
+      <label>رقم القفل</label>
+      <input type="text" id="lockNumber1">
+
+      <button type="button" class="btn-print" onclick="generateQR('1')">طباعة</button>
+    </form>
+
+    <form id="line2" class="form-section">
+      <label>الاسم</label>
+      <input type="text" id="name2">
+
+      <label>اسم الشركة</label>
+      <input type="text" id="company2">
+
+      <label>العمر</label>
+      <input type="number" id="age2">
+
+      <label>تأريخ الفحص</label>
+      <input type="date" id="testDate2">
+
+      <label>نوع الفحص</label>
+      <select id="testType2">
+        <option>فحص العمل في المرتفعات</option>
+        <option>فحص المناطق الضيقة</option>
+        <option>فحص عادي</option>
+      </select>
+
+      <label>تأريخ تدريب السلامة</label>
+      <input type="date" id="trainingDate2">
+
+      <label>رقم القفل</label>
+      <input type="text" id="lockNumber2">
+
+      <button type="button" class="btn-print" onclick="generateQR('2')">طباعة</button>
+    </form>
+
+    <div id="qr"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script>
+    function showForm(id) {
+      document.querySelectorAll('.form-section').forEach(section => {
+        section.style.display = 'none';
+      });
+      document.getElementById(id).style.display = 'block';
+      document.getElementById('qr').innerHTML = '';
+    }
+
+    function generateQR(line) {
+      const name = document.getElementById(`name${line}`).value;
+      const company = document.getElementById(`company${line}`).value;
+      const age = document.getElementById(`age${line}`).value;
+      const testDate = document.getElementById(`testDate${line}`).value;
+      const testType = document.getElementById(`testType${line}`).value;
+      const trainingDate = document.getElementById(`trainingDate${line}`).value;
+      const lockNumber = document.getElementById(`lockNumber${line}`).value;
+
+      const infoTable =
+        `الاسم: ${name}\n` +
+        `اسم الشركة: ${company}\n` +
+        `العمر: ${age}\n` +
+        `تأريخ الفحص: ${testDate}\n` +
+        `نوع الفحص: ${testType}\n` +
+        `تأريخ تدريب السلامة: ${trainingDate}\n` +
+        `رقم القفل: ${lockNumber}`;
+
+      const qrDiv = document.getElementById('qr');
+      qrDiv.innerHTML = '';
+
+      const title = document.createElement('h3');
+      title.textContent = 'فحص السلامة';
+      title.style.color = '#065f46';
+
+      const canvas = document.createElement('canvas');
+      QRCode.toCanvas(canvas, infoTable, function (error) {
+        if (error) console.error(error);
+        else {
+          qrDiv.appendChild(title);
+          qrDiv.appendChild(canvas);
+          setTimeout(() => {
+            window.print();
+          }, 300);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
