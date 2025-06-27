@@ -1,47 +1,21 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>استمارة الفحص والتدريب</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KCML KSD - QR Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
     body {
-      font-family: 'Tahoma', sans-serif;
-      background-color: #f0fdf4;
-      margin: 0;
-      padding: 20px;
+      font-family: Tahoma, sans-serif;
       direction: rtl;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background-color: #ffffff;
+      background-color: #f0fdf4;
       padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     h2 {
       text-align: center;
       color: #15803d;
-    }
-    .options {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .options button {
-      flex: 1;
-      padding: 10px;
-      margin: 0 5px;
-      background-color: #15803d;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .form-section {
-      display: none;
     }
     label {
       display: block;
@@ -51,161 +25,164 @@
     input, select {
       width: 100%;
       padding: 8px;
+      margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 8px;
-      margin-top: 5px;
     }
-    .btn-print {
-      margin-top: 20px;
-      background-color: #065f46;
+    button {
+      margin-top: 15px;
+      background-color: #15803d;
       color: white;
       padding: 10px;
       border: none;
-      width: 100%;
-      font-size: 18px;
       border-radius: 8px;
+      width: 100%;
+      font-size: 16px;
       cursor: pointer;
     }
-    #qr {
+    .qr-box {
+      background-color: white;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin: 10px;
+      display: inline-block;
       text-align: center;
-      margin-top: 20px;
     }
-    canvas {
-      margin-top: 10px;
+    #qr-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-
     @media print {
       body * {
         visibility: hidden;
       }
-      #qr, #qr * {
+      #qr-container, #qr-container * {
         visibility: visible;
       }
-      #qr {
+      #qr-container {
         position: absolute;
-        top: 30%;
-        left: 25%;
-        width: 50%;
-        text-align: center;
+        top: 0;
+        left: 0;
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>نظام الفحص والتدريب</h2>
-    <div class="options">
-      <button onclick="showForm('line1')">الخط الأول</button>
-      <button onclick="showForm('line2')">الخط الثاني</button>
-    </div>
 
-    <form id="line1" class="form-section">
-      <label>الاسم</label>
-      <input type="text" id="name1">
+  <h2>KCML KSD - فحص السلامة</h2>
 
-      <label>اسم الشركة</label>
-      <input type="text" id="company1">
+  <!-- ✅ النموذج اليدوي -->
+  <div style="max-width: 600px; margin: auto;">
+    <label>نوع الخط</label>
+    <select id="lineType">
+      <option>KSD 1</option>
+      <option>KSD 2</option>
+    </select>
 
-      <label>العمر</label>
-      <input type="number" id="age1">
+    <label>الاسم</label>
+    <input type="text" id="name">
 
-      <label>تأريخ الفحص</label>
-      <input type="date" id="testDate1">
+    <label>اسم الشركة</label>
+    <input type="text" id="company">
 
-      <label>نوع الفحص</label>
-      <select id="testType1">
-        <option>فحص العمل في المرتفعات</option>
-        <option>فحص المناطق الضيقة</option>
-        <option>فحص عادي</option>
-      </select>
+    <label>العمر</label>
+    <input type="number" id="age">
 
-      <label>تأريخ تدريب السلامة</label>
-      <input type="date" id="trainingDate1">
+    <label>تأريخ الفحص</label>
+    <input type="date" id="testDate">
 
-      <label>رقم القفل</label>
-      <input type="text" id="lockNumber1">
+    <label>نوع الفحص</label>
+    <select id="testType">
+      <option>فحص العمل في المرتفعات</option>
+      <option>فحص المناطق الضيقة</option>
+      <option>فحص عادي</option>
+    </select>
 
-      <button type="button" class="btn-print" onclick="generateQR('1')">طباعة</button>
-    </form>
+    <label>تأريخ تدريب السلامة</label>
+    <input type="date" id="trainingDate">
 
-    <form id="line2" class="form-section">
-      <label>الاسم</label>
-      <input type="text" id="name2">
+    <label>رقم القفل</label>
+    <input type="text" id="lockNumber">
 
-      <label>اسم الشركة</label>
-      <input type="text" id="company2">
-
-      <label>العمر</label>
-      <input type="number" id="age2">
-
-      <label>تأريخ الفحص</label>
-      <input type="date" id="testDate2">
-
-      <label>نوع الفحص</label>
-      <select id="testType2">
-        <option>فحص العمل في المرتفعات</option>
-        <option>فحص المناطق الضيقة</option>
-        <option>فحص عادي</option>
-      </select>
-
-      <label>تأريخ تدريب السلامة</label>
-      <input type="date" id="trainingDate2">
-
-      <label>رقم القفل</label>
-      <input type="text" id="lockNumber2">
-
-      <button type="button" class="btn-print" onclick="generateQR('2')">طباعة</button>
-    </form>
-
-    <div id="qr"></div>
+    <button onclick="generateManualQR()">توليد رمز QR</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <hr>
+
+  <!-- ✅ رفع ملف Excel -->
+  <h2>أو رفع ملف Excel</h2>
+  <input type="file" id="fileInput" accept=".xlsx" />
+  <button onclick="window.print()">🖨️ طباعة الكل</button>
+
+  <div id="qr-container"></div>
+
   <script>
-    function showForm(id) {
-      document.querySelectorAll('.form-section').forEach(section => {
-        section.style.display = 'none';
-      });
-      document.getElementById(id).style.display = 'block';
-      document.getElementById('qr').innerHTML = '';
+    // ✅ التاريخ الثابت للانتهاء
+    const fixedExpireDate = "2025-08-01";
+
+    // ✅ من النموذج اليدوي
+    function generateManualQR() {
+      const data = {
+        "نوع الخط": document.getElementById('lineType').value,
+        "الاسم": document.getElementById('name').value,
+        "اسم الشركة": document.getElementById('company').value,
+        "العمر": document.getElementById('age').value,
+        "تأريخ الفحص": document.getElementById('testDate').value,
+        "نوع الفحص": document.getElementById('testType').value,
+        "تأريخ تدريب السلامة": document.getElementById('trainingDate').value,
+        "رقم القفل": document.getElementById('lockNumber').value
+      };
+      createQRBox(data);
     }
 
-    function generateQR(line) {
-      const name = document.getElementById(`name${line}`).value;
-      const company = document.getElementById(`company${line}`).value;
-      const age = document.getElementById(`age${line}`).value;
-      const testDate = document.getElementById(`testDate${line}`).value;
-      const testType = document.getElementById(`testType${line}`).value;
-      const trainingDate = document.getElementById(`trainingDate${line}`).value;
-      const lockNumber = document.getElementById(`lockNumber${line}`).value;
+    // ✅ من ملف Excel
+    document.getElementById('fileInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
 
-      const infoTable =
-        `الاسم: ${name}\n` +
-        `اسم الشركة: ${company}\n` +
-        `العمر: ${age}\n` +
-        `تأريخ الفحص: ${testDate}\n` +
-        `نوع الفحص: ${testType}\n` +
-        `تأريخ تدريب السلامة: ${trainingDate}\n` +
-        `رقم القفل: ${lockNumber}`;
+      reader.onload = function (e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
 
-      const qrDiv = document.getElementById('qr');
-      qrDiv.innerHTML = '';
+        jsonData.forEach(record => createQRBox(record));
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
+
+    // ✅ إنشاء QR Box
+    function createQRBox(data) {
+      const info =
+        `نوع الخط: ${data["نوع الخط"]}\n` +
+        `الاسم: ${data["الاسم"]}\n` +
+        `اسم الشركة: ${data["اسم الشركة"]}\n` +
+        `العمر: ${data["العمر"]}\n` +
+        `تأريخ الفحص: ${data["تأريخ الفحص"]}\n` +
+        `نوع الفحص: ${data["نوع الفحص"]}\n` +
+        `تأريخ تدريب السلامة: ${data["تأريخ تدريب السلامة"]}\n` +
+        `رقم القفل: ${data["رقم القفل"]}\n` +
+        `تأريخ الانتهاء: ${fixedExpireDate}`;
+
+      const box = document.createElement('div');
+      box.className = 'qr-box';
 
       const title = document.createElement('h3');
-      title.textContent = 'فحص السلامة';
-      title.style.color = '#065f46';
+      title.textContent = data["الاسم"];
 
       const canvas = document.createElement('canvas');
-      QRCode.toCanvas(canvas, infoTable, function (error) {
+      QRCode.toCanvas(canvas, info, function (error) {
         if (error) console.error(error);
-        else {
-          qrDiv.appendChild(title);
-          qrDiv.appendChild(canvas);
-          setTimeout(() => {
-            window.print();
-          }, 300);
-        }
       });
+
+      box.appendChild(title);
+      box.appendChild(canvas);
+
+      document.getElementById('qr-container').appendChild(box);
     }
   </script>
 </body>
