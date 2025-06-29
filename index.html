@@ -40,20 +40,49 @@
       font-size: 16px;
       cursor: pointer;
     }
+
+    /* ✅ شكل البطاقة 5x5 سم */
     .qr-box {
+      width: 5cm;
+      height: 5cm;
       background-color: white;
-      padding: 10px;
-      border-radius: 8px;
       border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 6px;
       margin: 10px;
-      display: inline-block;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
+      font-size: 10px;
     }
+
+    .qr-box img {
+      width: 2cm;
+      height: 2cm;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 4px;
+    }
+
+    .qr-box h3 {
+      font-size: 11px;
+      margin: 4px 0;
+    }
+
+    .qr-box canvas {
+      width: 2cm !important;
+      height: 2cm !important;
+    }
+
     #qr-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
     }
+
     @media print {
       body * {
         visibility: hidden;
@@ -107,6 +136,9 @@
     <label>رقم القفل</label>
     <input type="text" id="lockNumber">
 
+    <label>رفع صورة (اختياري)</label>
+    <input type="file" id="photoInput" accept="image/*">
+
     <button onclick="generateManualQR()">توليد رمز QR</button>
   </div>
 
@@ -120,10 +152,22 @@
   <div id="qr-container"></div>
 
   <script>
-    // ✅ التاريخ الثابت للانتهاء
     const fixedExpireDate = "2025-08-01";
+    let uploadedImageData = "";
 
-    // ✅ من النموذج اليدوي
+    // قراءة صورة من الحاسوب
+    document.getElementById('photoInput').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        uploadedImageData = e.target.result;
+      };
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // من النموذج اليدوي
     function generateManualQR() {
       const data = {
         "نوع الخط": document.getElementById('lineType').value,
@@ -133,12 +177,13 @@
         "تأريخ الفحص": document.getElementById('testDate').value,
         "نوع الفحص": document.getElementById('testType').value,
         "تأريخ تدريب السلامة": document.getElementById('trainingDate').value,
-        "رقم القفل": document.getElementById('lockNumber').value
+        "رقم القفل": document.getElementById('lockNumber').value,
+        "الصورة": uploadedImageData
       };
       createQRBox(data);
     }
 
-    // ✅ من ملف Excel
+    // من ملف Excel
     document.getElementById('fileInput').addEventListener('change', function (e) {
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -148,14 +193,13 @@
         const workbook = XLSX.read(data, { type: 'array' });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
-
         jsonData.forEach(record => createQRBox(record));
       };
 
       reader.readAsArrayBuffer(file);
     });
 
-    // ✅ إنشاء QR Box
+    // توليد صندوق QR
     function createQRBox(data) {
       const info =
         `نوع الخط: ${data["نوع الخط"]}\n` +
@@ -173,15 +217,20 @@
 
       const title = document.createElement('h3');
       title.textContent = data["الاسم"];
+      box.appendChild(title);
+
+      if (data["الصورة"]) {
+        const img = document.createElement('img');
+        img.src = data["الصورة"];
+        box.appendChild(img);
+      }
 
       const canvas = document.createElement('canvas');
       QRCode.toCanvas(canvas, info, function (error) {
         if (error) console.error(error);
       });
 
-      box.appendChild(title);
       box.appendChild(canvas);
-
       document.getElementById('qr-container').appendChild(box);
     }
   </script>
