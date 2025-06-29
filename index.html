@@ -22,12 +22,13 @@
       margin-top: 10px;
       color: #065f46;
     }
-    input, select {
+    input, select, textarea {
       width: 100%;
       padding: 8px;
       margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 8px;
+      box-sizing: border-box;
     }
     button {
       margin-top: 15px;
@@ -40,8 +41,6 @@
       font-size: 16px;
       cursor: pointer;
     }
-
-    /* شكل البطاقة 5x5 سم */
     .qr-box {
       width: 5cm;
       height: 5cm;
@@ -58,7 +57,6 @@
       text-align: center;
       font-size: 10px;
     }
-
     .qr-box img {
       width: 2cm;
       height: 2cm;
@@ -66,23 +64,19 @@
       border-radius: 6px;
       margin-bottom: 4px;
     }
-
     .qr-box h3 {
       font-size: 11px;
       margin: 4px 0;
     }
-
     .qr-box canvas {
       width: 2cm !important;
       height: 2cm !important;
     }
-
     #qr-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
     }
-
     @media print {
       body * {
         visibility: hidden;
@@ -103,8 +97,19 @@
 
   <h2>KCML KSD - فحص السلامة</h2>
 
+  <!-- أداة تحويل صورة إلى Base64 -->
+  <div style="max-width: 600px; margin: auto;">
+    <h3>1️⃣ تحويل صورة إلى Base64</h3>
+    <input type="file" id="convertBase64Input" accept="image/*">
+    <textarea id="base64Result" readonly placeholder="سيظهر هنا كود Base64. انسخه وضعه داخل ملف Excel."></textarea>
+    <button onclick="copyBase64()">📋 نسخ الكود</button>
+  </div>
+
+  <hr>
+
   <!-- النموذج اليدوي -->
   <div style="max-width: 600px; margin: auto;">
+    <h3>2️⃣ إدخال يدوي</h3>
     <label>نوع الخط</label>
     <select id="lineType">
       <option>KSD 1</option>
@@ -136,7 +141,7 @@
     <label>رقم القفل</label>
     <input type="text" id="lockNumber">
 
-    <label>رفع صورة (اختياري)</label>
+    <label>رفع صورة</label>
     <input type="file" id="photoInput" accept="image/*">
 
     <button onclick="generateManualQR()">توليد رمز QR</button>
@@ -145,7 +150,7 @@
   <hr>
 
   <!-- رفع ملف Excel -->
-  <h2>أو رفع ملف Excel</h2>
+  <h2>3️⃣ رفع ملف Excel</h2>
   <input type="file" id="fileInput" accept=".xlsx" />
   <button onclick="window.print()">🖨️ طباعة الكل</button>
 
@@ -154,6 +159,24 @@
   <script>
     const fixedExpireDate = "2025-08-01";
     let uploadedImageData = "";
+
+    // تحويل صورة إلى Base64
+    document.getElementById("convertBase64Input").addEventListener("change", function (e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        document.getElementById("base64Result").value = reader.result;
+      };
+      if (file) reader.readAsDataURL(file);
+    });
+
+    function copyBase64() {
+      const text = document.getElementById("base64Result");
+      text.select();
+      text.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("✅ تم نسخ الكود!");
+    }
 
     // قراءة صورة من الحاسوب للنموذج اليدوي
     document.getElementById('photoInput').addEventListener('change', function (event) {
@@ -167,7 +190,7 @@
       }
     });
 
-    // من النموذج اليدوي
+    // توليد QR من النموذج اليدوي
     function generateManualQR() {
       const data = {
         "نوع الخط": document.getElementById('lineType').value,
@@ -183,7 +206,7 @@
       createQRBox(data);
     }
 
-    // من ملف Excel
+    // رفع ملف Excel
     document.getElementById('fileInput').addEventListener('change', function (e) {
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -199,26 +222,18 @@
       reader.readAsArrayBuffer(file);
     });
 
-    // توليد صندوق QR مع ربط الصور من مجلد photos
+    // توليد البطاقة وQR
     function createQRBox(data) {
       const info =
         `نوع الخط: ${data["نوع الخط"]}
-` +
-        `الاسم: ${data["الاسم"]}
-` +
-        `اسم الشركة: ${data["اسم الشركة"]}
-` +
-        `العمر: ${data["العمر"]}
-` +
-        `تأريخ الفحص: ${data["تأريخ الفحص"]}
-` +
-        `نوع الفحص: ${data["نوع الفحص"]}
-` +
-        `تأريخ تدريب السلامة: ${data["تأريخ تدريب السلامة"]}
-` +
-        `رقم القفل: ${data["رقم القفل"]}
-` +
-        `تأريخ الانتهاء: ${fixedExpireDate}`;
+الاسم: ${data["الاسم"]}
+اسم الشركة: ${data["اسم الشركة"]}
+العمر: ${data["العمر"]}
+تأريخ الفحص: ${data["تأريخ الفحص"]}
+نوع الفحص: ${data["نوع الفحص"]}
+تأريخ تدريب السلامة: ${data["تأريخ تدريب السلامة"]}
+رقم القفل: ${data["رقم القفل"]}
+تأريخ الانتهاء: ${fixedExpireDate}`;
 
       const box = document.createElement('div');
       box.className = 'qr-box';
@@ -227,13 +242,10 @@
       title.textContent = data["الاسم"];
       box.appendChild(title);
 
-      // إذا الصورة موجودة نعرضها من مجلد photos
+      // عرض الصورة إذا موجودة بصيغة Base64
       if (data["الصورة"]) {
         const img = document.createElement('img');
-        img.src = `photos/${data["الصورة"]}`;
-        img.onerror = function () {
-          this.style.display = 'none';
-        };
+        img.src = data["الصورة"];
         box.appendChild(img);
       }
 
