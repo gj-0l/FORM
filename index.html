@@ -41,7 +41,7 @@
       cursor: pointer;
     }
 
-    /* ✅ شكل البطاقة 5x5 سم */
+    /* شكل البطاقة 5x5 سم */
     .qr-box {
       width: 5cm;
       height: 5cm;
@@ -103,7 +103,7 @@
 
   <h2>KCML KSD - فحص السلامة</h2>
 
-  <!-- ✅ النموذج اليدوي -->
+  <!-- النموذج اليدوي -->
   <div style="max-width: 600px; margin: auto;">
     <label>نوع الخط</label>
     <select id="lineType">
@@ -144,7 +144,7 @@
 
   <hr>
 
-  <!-- ✅ رفع ملف Excel -->
+  <!-- رفع ملف Excel -->
   <h2>أو رفع ملف Excel</h2>
   <input type="file" id="fileInput" accept=".xlsx" />
   <button onclick="window.print()">🖨️ طباعة الكل</button>
@@ -155,7 +155,7 @@
     const fixedExpireDate = "2025-08-01";
     let uploadedImageData = "";
 
-    // قراءة صورة من الحاسوب
+    // قراءة صورة من الحاسوب للنموذج اليدوي
     document.getElementById('photoInput').addEventListener('change', function (event) {
       const file = event.target.files[0];
       const reader = new FileReader();
@@ -199,17 +199,25 @@
       reader.readAsArrayBuffer(file);
     });
 
-    // توليد صندوق QR
+    // توليد صندوق QR مع ربط الصور من مجلد photos
     function createQRBox(data) {
       const info =
-        `نوع الخط: ${data["نوع الخط"]}\n` +
-        `الاسم: ${data["الاسم"]}\n` +
-        `اسم الشركة: ${data["اسم الشركة"]}\n` +
-        `العمر: ${data["العمر"]}\n` +
-        `تأريخ الفحص: ${data["تأريخ الفحص"]}\n` +
-        `نوع الفحص: ${data["نوع الفحص"]}\n` +
-        `تأريخ تدريب السلامة: ${data["تأريخ تدريب السلامة"]}\n` +
-        `رقم القفل: ${data["رقم القفل"]}\n` +
+        `نوع الخط: ${data["نوع الخط"]}
+` +
+        `الاسم: ${data["الاسم"]}
+` +
+        `اسم الشركة: ${data["اسم الشركة"]}
+` +
+        `العمر: ${data["العمر"]}
+` +
+        `تأريخ الفحص: ${data["تأريخ الفحص"]}
+` +
+        `نوع الفحص: ${data["نوع الفحص"]}
+` +
+        `تأريخ تدريب السلامة: ${data["تأريخ تدريب السلامة"]}
+` +
+        `رقم القفل: ${data["رقم القفل"]}
+` +
         `تأريخ الانتهاء: ${fixedExpireDate}`;
 
       const box = document.createElement('div');
@@ -219,9 +227,13 @@
       title.textContent = data["الاسم"];
       box.appendChild(title);
 
+      // إذا الصورة موجودة نعرضها من مجلد photos
       if (data["الصورة"]) {
         const img = document.createElement('img');
-        img.src = data["الصورة"];
+        img.src = `photos/${data["الصورة"]}`;
+        img.onerror = function () {
+          this.style.display = 'none';
+        };
         box.appendChild(img);
       }
 
