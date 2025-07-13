@@ -13,18 +13,15 @@
       background-color: #f0fdf4;
       padding: 20px;
     }
-
     h2 {
       text-align: center;
       color: #15803d;
     }
-
     label {
       display: block;
       margin-top: 10px;
       color: #065f46;
     }
-
     input, select, textarea {
       width: 100%;
       padding: 8px;
@@ -33,7 +30,6 @@
       border-radius: 8px;
       box-sizing: border-box;
     }
-
     button {
       margin-top: 15px;
       background-color: #15803d;
@@ -45,7 +41,6 @@
       font-size: 16px;
       cursor: pointer;
     }
-
     .qr-box {
       width: 5cm;
       background-color: white;
@@ -61,22 +56,19 @@
       text-align: center;
       font-size: 10px;
     }
-
     .qr-box h3 {
       font-size: 11px;
       margin: 0;
       padding: 0;
       line-height: 1.1;
     }
-
     .image-qr-row {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 2px; /* أقل تباعد بين الصورة و QR */
+      gap: 2px;
       margin-top: 2px;
     }
-
     .image-qr-row img,
     .image-qr-row canvas {
       width: 2cm !important;
@@ -84,13 +76,11 @@
       border-radius: 5px;
       object-fit: cover;
     }
-
     #qr-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
     }
-
     @media print {
       body * {
         visibility: hidden;
@@ -111,6 +101,7 @@
 
   <h2>KCML KSD - فحص السلامة</h2>
 
+  <!-- القسم 1️⃣ تحويل صورة إلى Base64 -->
   <div style="max-width: 600px; margin: auto;">
     <h3>1️⃣ تحويل صورة إلى Base64</h3>
     <input type="file" id="convertBase64Input" accept="image/*">
@@ -120,6 +111,7 @@
 
   <hr>
 
+  <!-- القسم 2️⃣ إدخال يدوي -->
   <div style="max-width: 600px; margin: auto;">
     <h3>2️⃣ إدخال يدوي</h3>
     <label>نوع الخط</label>
@@ -161,6 +153,7 @@
 
   <hr>
 
+  <!-- القسم 3️⃣ رفع ملف Excel -->
   <h2>3️⃣ رفع ملف Excel</h2>
   <input type="file" id="fileInput" accept=".xlsx" />
   <button onclick="window.print()">🖨️ طباعة الكل</button>
@@ -171,13 +164,34 @@
     const fixedExpireDate = "2025-08-01";
     let uploadedImageData = "";
 
+    // 1️⃣ تحويل صورة إلى base64 + تقليل الحجم
     document.getElementById("convertBase64Input").addEventListener("change", function (e) {
       const file = e.target.files[0];
+      if (!file) return;
       const reader = new FileReader();
-      reader.onloadend = function () {
-        document.getElementById("base64Result").value = reader.result;
+      reader.onload = function (event) {
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          const maxSize = 150;
+          let width = img.width, height = img.height;
+
+          if (width > height) {
+            if (width > maxSize) { height *= maxSize / width; width = maxSize; }
+          } else {
+            if (height > maxSize) { width *= maxSize / height; height = maxSize; }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.6);
+          document.getElementById("base64Result").value = compressedBase64;
+        };
+        img.src = event.target.result;
       };
-      if (file) reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
     });
 
     function copyBase64() {
@@ -188,15 +202,33 @@
       alert("✅ تم نسخ الكود!");
     }
 
+    // 2️⃣ إدخال يدوي - رفع صورة مضغوطة
     document.getElementById('photoInput').addEventListener('change', function (event) {
       const file = event.target.files[0];
+      if (!file) return;
       const reader = new FileReader();
       reader.onload = function (e) {
-        uploadedImageData = e.target.result;
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          const maxSize = 150;
+          let width = img.width, height = img.height;
+
+          if (width > height) {
+            if (width > maxSize) { height *= maxSize / width; width = maxSize; }
+          } else {
+            if (height > maxSize) { width *= maxSize / height; height = maxSize; }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          uploadedImageData = canvas.toDataURL("image/jpeg", 0.6);
+        };
+        img.src = e.target.result;
       };
-      if (file) {
-        reader.readAsDataURL(file);
-      }
+      reader.readAsDataURL(file);
     });
 
     function generateManualQR() {
@@ -217,7 +249,6 @@
     document.getElementById('fileInput').addEventListener('change', function (e) {
       const file = e.target.files[0];
       const reader = new FileReader();
-
       reader.onload = function (e) {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
@@ -225,7 +256,6 @@
         const jsonData = XLSX.utils.sheet_to_json(sheet);
         jsonData.forEach(record => createQRBox(record));
       };
-
       reader.readAsArrayBuffer(file);
     });
 
@@ -264,9 +294,7 @@
       document.getElementById('qr-container').appendChild(box);
 
       QRCode.toCanvas(canvas, info, function (error) {
-        if (error) {
-          console.error("خطأ في توليد QR:", error);
-        }
+        if (error) console.error("خطأ في توليد QR:", error);
       });
     }
   </script>
