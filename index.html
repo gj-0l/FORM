@@ -82,7 +82,7 @@
       justify-content: center;
     }
 
-    /* --- الطباعة: حجم ليبل 5x10 سم بدون هوامش أو حشوة --- */
+    /* --- الطباعة: حجم ليبل 2x5 سم بدون هوامش أو حشوة --- */
     @media print {
       body * {
         visibility: hidden;
@@ -100,8 +100,8 @@
         height: 100vh;
       }
       .qr-box {
-        width: 5cm !important;    /* العرض */
-        height: 10cm !important;  /* الارتفاع */
+        width: 2cm !important;    /* العرض */
+        height: 5cm !important;   /* الارتفاع */
         margin: 0 !important;
         padding: 0 !important;
         border: none !important;
@@ -111,18 +111,18 @@
         flex-direction: column !important;
         justify-content: center !important;
         align-items: center !important;
-        font-size: 12px !important;
+        font-size: 8px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        font-size: 14px !important;
-        margin: 0 0 0.3cm 0 !important;
+        font-size: 10px !important;
+        margin: 0 0 0.1cm 0 !important;
         padding: 0 !important;
         text-align: center !important;
       }
       .image-qr-row {
         flex-direction: column !important;
-        gap: 0.3cm !important;
+        gap: 0.1cm !important;
         justify-content: center !important;
         align-items: center !important;
         width: 100% !important;
@@ -131,8 +131,8 @@
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 4.5cm !important;
-        height: 4.5cm !important;
+        width: 1.8cm !important;
+        height: 1.8cm !important;
         border-radius: 0 !important;
         object-fit: contain !important;
         margin: 0 !important;
