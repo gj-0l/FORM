@@ -78,17 +78,13 @@
         display: block;
         position: relative;
         page-break-after: always;
-        width: auto;
+        width: 100%;
         text-align: center;
-        margin: 10px auto;
       }
       .qr-box {
-        margin: 0 auto 15px auto;
-        padding: 10px;
-        font-size: 14px;
-        width: 6cm;
-        border: none;
-        box-shadow: none;
+        margin: auto;
+        padding-top: 6cm;
+        font-size: 22px;
       }
       .qr-box * {
         display: none !important;
@@ -99,18 +95,16 @@
         visibility: visible !important;
       }
       .qr-box h3 {
-        margin-bottom: 8px;
-        font-size: 16px;
+        margin-bottom: 20px;
       }
       .image-qr-row {
         justify-content: center;
-        gap: 10px;
+        gap: 20px;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 3.5cm !important;
-        height: 3.5cm !important;
-        border-radius: 5px;
+        width: 4cm !important;
+        height: 4cm !important;
       }
     }
   </style>
@@ -125,7 +119,7 @@
 
   <script>
     // مثال على صورة صغيرة مضمنة (Base64) لتسهيل التجربة:
-    const sampleImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABGUlEQVR4nO3RQQ3AIBAEQcsDhvr0TsT8OEAlKyibcwOuQZthb+Xn6CpgBqHTIBxy4QDYIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIDAH0AxmY8PYX4oDAAAAAElFTkSuQmCC";
+    const sampleImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABGUlEQVR4nO3RQQ3AIBAEQcsDhvr0TsT8OEAlKyibcwOuQZthb+Xn6CpgBqHTIBxy4QDYIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIDAH0AxmY8PYX4oDAAAAAElFTkSuQmCC";
 
     function addSampleCard() {
       const data = {
@@ -168,4 +162,4 @@
   </script>
 
 </body>
-</html>
+</html> 
