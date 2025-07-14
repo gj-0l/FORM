@@ -42,7 +42,7 @@
       cursor: pointer;
     }
     .qr-box {
-      width: 5cm;
+      width: 4cm;
       background-color: white;
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -52,7 +52,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: start;
+      justify-content: center;
       text-align: center;
       font-size: 10px;
     }
@@ -66,13 +66,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 2px;
-      margin-top: 2px;
+      gap: 4px;
+      margin-top: 4px;
     }
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 2cm !important;
-      height: 2cm !important;
+      width: 1.8cm !important;
+      height: 1.8cm !important;
       border-radius: 5px;
       object-fit: cover;
     }
@@ -82,7 +82,7 @@
       justify-content: center;
     }
 
-    /* --- الطباعة: ليبل عرضي 5×5 سم بدون الاسم --- */
+    /* ✅ الطباعة: 4x4cm بدون اسم */
     @media print {
       body * {
         visibility: hidden;
@@ -94,49 +94,37 @@
       }
       #qr-container {
         display: block;
-        padding: 0;
-        margin: 0;
         width: 100vw;
         height: 100vh;
+        padding: 0;
+        margin: 0;
       }
       .qr-box {
-        width: 5cm !important;    /* العرض */
-        height: 5cm !important;   /* الارتفاع */
+        width: 4cm !important;
+        height: 4cm !important;
         margin: 0 !important;
-        padding: 0.3cm !important;
+        padding: 0.2cm !important;
         border: none !important;
-        box-sizing: border-box;
-        page-break-after: always; /* كل ليبل في صفحة مستقلة */
+        page-break-after: always;
         display: flex !important;
-        flex-direction: row !important; /* أفقي */
+        flex-direction: row !important;
         justify-content: center !important;
         align-items: center !important;
-        font-size: 12px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        display: none !important; /* إخفاء الاسم تمامًا */
+        display: none !important; /* لا يظهر الاسم */
       }
       .image-qr-row {
-        flex-direction: row !important;
-        gap: 0.3cm !important;
-        justify-content: center !important;
-        align-items: center !important;
-        width: 100% !important;
-        height: auto !important;
-        margin: 0 !important;
+        gap: 0.2cm !important;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 3.5cm !important;
-        height: 3.5cm !important;
-        border-radius: 0 !important;
+        width: 1.8cm !important;
+        height: 1.8cm !important;
         object-fit: contain !important;
-        margin: 0 !important;
-        padding: 0 !important;
         border: none !important;
       }
-      /* إظهار فقط الصورة والQR */
       .qr-box > div:not(.image-qr-row) {
         display: none !important;
       }
@@ -147,7 +135,7 @@
 
   <h2>KCML KSD - فحص السلامة</h2>
 
-  <!-- القسم 1️⃣ تحويل صورة إلى Base64 -->
+  <!-- تحويل صورة إلى Base64 -->
   <div style="max-width: 600px; margin: auto;">
     <h3>1️⃣ تحويل صورة إلى Base64</h3>
     <input type="file" id="convertBase64Input" accept="image/*">
@@ -157,7 +145,7 @@
 
   <hr>
 
-  <!-- القسم 2️⃣ إدخال يدوي -->
+  <!-- إدخال يدوي -->
   <div style="max-width: 600px; margin: auto;">
     <h3>2️⃣ إدخال يدوي</h3>
     <label>نوع الخط</label>
@@ -199,7 +187,7 @@
 
   <hr>
 
-  <!-- القسم 3️⃣ رفع ملف Excel -->
+  <!-- رفع ملف Excel -->
   <h2>3️⃣ رفع ملف Excel</h2>
   <input type="file" id="fileInput" accept=".xlsx" />
   <button onclick="window.print()">🖨️ طباعة الكل</button>
@@ -210,7 +198,6 @@
     const fixedExpireDate = "2025-08-01";
     let uploadedImageData = "";
 
-    // 1️⃣ تحويل صورة إلى base64 + تقليل الحجم
     document.getElementById("convertBase64Input").addEventListener("change", function (e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -248,7 +235,6 @@
       alert("✅ تم نسخ الكود!");
     }
 
-    // 2️⃣ إدخال يدوي - رفع صورة مضغوطة
     document.getElementById('photoInput').addEventListener('change', function (event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -306,8 +292,7 @@
     });
 
     function createQRBox(data) {
-      const info =
-        `نوع الخط: ${data["نوع الخط"]}
+      const info = `نوع الخط: ${data["نوع الخط"]}
 الاسم: ${data["الاسم"]}
 اسم الشركة: ${data["اسم الشركة"]}
 العمر: ${data["العمر"]}
