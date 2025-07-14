@@ -43,6 +43,7 @@
     }
     .qr-box {
       width: 4cm;
+      height: 5cm;
       background-color: white;
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -71,8 +72,8 @@
     }
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 1.8cm !important;
-      height: 1.8cm !important;
+      width: 2.2cm !important;
+      height: 2.2cm !important;
       border-radius: 5px;
       object-fit: cover;
     }
@@ -82,7 +83,7 @@
       justify-content: center;
     }
 
-    /* ✅ الطباعة: 4x4cm بدون اسم */
+    /* ✅ طباعة 4x5 سم بدون اسم */
     @media print {
       body * {
         visibility: hidden;
@@ -101,27 +102,28 @@
       }
       .qr-box {
         width: 4cm !important;
-        height: 4cm !important;
+        height: 5cm !important;
         margin: 0 !important;
         padding: 0.2cm !important;
         border: none !important;
         page-break-after: always;
         display: flex !important;
-        flex-direction: row !important;
+        flex-direction: column !important;
         justify-content: center !important;
         align-items: center !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        display: none !important; /* لا يظهر الاسم */
+        display: none !important;
       }
       .image-qr-row {
         gap: 0.2cm !important;
+        flex-direction: column !important;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 1.8cm !important;
-        height: 1.8cm !important;
+        width: 2.2cm !important;
+        height: 2.2cm !important;
         object-fit: contain !important;
         border: none !important;
       }
