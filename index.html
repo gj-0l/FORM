@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KCML KSD - QR Generator صغير</title>
+  <title>KCML KSD - QR Generator ليبل واحد</title>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
@@ -39,6 +39,7 @@
       color: white;
       cursor: pointer;
     }
+    /* ليبل واحد بحجم صغير */
     .qr-box {
       width: 6cm;
       height: 4cm;
@@ -46,7 +47,7 @@
       border: 1px solid #ccc;
       border-radius: 6px;
       padding: 4px;
-      margin: 4px auto;
+      margin: 10px auto;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -80,8 +81,8 @@
     }
     #qr-container {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
+      margin-top: 20px;
     }
 
     @media print {
@@ -92,11 +93,11 @@
         visibility: visible;
       }
       #qr-container {
-        display: block;
-        padding: 0;
-        margin: 0;
         width: 100vw;
         height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
       .qr-box {
         width: 6cm !important;
@@ -105,9 +106,9 @@
         padding: 0.3cm !important;
         border: 1px solid black !important;
         box-sizing: border-box;
-        page-break-after: always;
         font-size: 11px !important;
         background-color: white !important;
+        page-break-after: auto !important;
       }
       .qr-box h3 {
         font-size: 12px !important;
@@ -123,7 +124,7 @@
 </head>
 <body>
 
-  <h2>KCML KSD - فحص السلامة صغير</h2>
+  <h2>KCML KSD - فحص السلامة ليبل واحد</h2>
 
   <!-- القسم 1️⃣ تحويل صورة إلى Base64 -->
   <div style="max-width: 400px; margin: auto;">
@@ -180,7 +181,7 @@
   <!-- القسم 3️⃣ رفع ملف Excel -->
   <h2 style="font-size:14px;">3️⃣ رفع ملف Excel</h2>
   <input type="file" id="fileInput" accept=".xlsx" style="max-width: 400px; margin: auto; display: block;" />
-  <button onclick="window.print()" style="max-width: 400px; margin: 10px auto; display: block;">🖨️ طباعة الكل</button>
+  <button onclick="window.print()" style="max-width: 400px; margin: 10px auto; display: block;">🖨️ طباعة الليبل</button>
 
   <div id="qr-container"></div>
 
@@ -255,6 +256,50 @@
       reader.readAsDataURL(file);
     });
 
+    // وظيفة توليد أو تحديث الليبل الوحيد
+    function createOrUpdateQRBox(data) {
+      const info =
+        `نوع الخط: ${data["نوع الخط"]}
+الاسم: ${data["الاسم"]}
+اسم الشركة: ${data["اسم الشركة"]}
+العمر: ${data["العمر"]}
+تأريخ الفحص: ${data["تأريخ الفحص"]}
+نوع الفحص: ${data["نوع الفحص"]}
+تأريخ تدريب السلامة: ${data["تأريخ تدريب السلامة"]}
+رقم القفل: ${data["رقم القفل"]}
+تأريخ الانتهاء: ${fixedExpireDate}`;
+
+      let box = document.querySelector('.qr-box');
+      if (!box) {
+        box = document.createElement('div');
+        box.className = 'qr-box';
+        box.innerHTML = `
+          <h3></h3>
+          <div class="image-qr-row">
+            <img />
+            <canvas></canvas>
+          </div>
+        `;
+        document.getElementById('qr-container').appendChild(box);
+      }
+
+      box.querySelector('h3').textContent = data["الاسم"] || 'بدون اسم';
+      const img = box.querySelector('img');
+      const canvas = box.querySelector('canvas');
+
+      if (data["الصورة"]) {
+        img.src = data["الصورة"];
+        img.style.display = 'block';
+      } else {
+        img.style.display = 'none';
+      }
+
+      // توليد QR في الكانفس مع حذف القديم (لو موجود)
+      QRCode.toCanvas(canvas, info, { width: 100, margin: 1 }, function (error) {
+        if (error) console.error("خطأ في توليد QR:", error);
+      });
+    }
+
     function generateManualQR() {
       const data = {
         "نوع الخط": document.getElementById('lineType').value,
@@ -267,9 +312,10 @@
         "رقم القفل": document.getElementById('lockNumber').value,
         "الصورة": uploadedImageData
       };
-      createQRBox(data);
+      createOrUpdateQRBox(data);
     }
 
+    // رفع ملف Excel يعرض أول سجل فقط في الليبل الواحد
     document.getElementById('fileInput').addEventListener('change', function (e) {
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -278,49 +324,12 @@
         const workbook = XLSX.read(data, { type: 'array' });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
-        jsonData.forEach(record => createQRBox(record));
+        if (jsonData.length > 0) {
+          createOrUpdateQRBox(jsonData[0]);  // فقط السجل الأول
+        }
       };
       reader.readAsArrayBuffer(file);
     });
-
-    function createQRBox(data) {
-      const info =
-        `نوع الخط: ${data["نوع الخط"]}
-الاسم: ${data["الاسم"]}
-اسم الشركة: ${data["اسم الشركة"]}
-العمر: ${data["العمر"]}
-تأريخ الفحص: ${data["تأريخ الفحص"]}
-نوع الفحص: ${data["نوع الفحص"]}
-تأريخ تدريب السلامة: ${data["تأريخ تدريب السلامة"]}
-رقم القفل: ${data["رقم القفل"]}
-تأريخ الانتهاء: ${fixedExpireDate}`;
-
-      const box = document.createElement('div');
-      box.className = 'qr-box';
-
-      const title = document.createElement('h3');
-      title.textContent = data["الاسم"] || 'بدون اسم';
-      box.appendChild(title);
-
-      const row = document.createElement('div');
-      row.className = 'image-qr-row';
-
-      if (data["الصورة"]) {
-        const img = document.createElement('img');
-        img.src = data["الصورة"];
-        row.appendChild(img);
-      }
-
-      const canvas = document.createElement('canvas');
-      row.appendChild(canvas);
-      box.appendChild(row);
-
-      document.getElementById('qr-container').appendChild(box);
-
-      QRCode.toCanvas(canvas, info, { width: 100, margin: 1 }, function (error) {
-        if (error) console.error("خطأ في توليد QR:", error);
-      });
-    }
   </script>
 </body>
 </html>
