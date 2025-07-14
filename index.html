@@ -42,54 +42,47 @@
       cursor: pointer;
     }
     .qr-box {
-      width: 10cm;
-      height: 7cm;
+      width: 5cm;
       background-color: white;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 6px;
-      margin: 6px auto;
+      border-radius: 8px;
+      padding: 4px;
+      margin: 6px;
       box-sizing: border-box;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-around;
-      font-size: 8px;
+      justify-content: start;
       text-align: center;
+      font-size: 10px;
     }
     .qr-box h3 {
-      font-size: 12px;
-      margin: 0 10px 0 0;
+      font-size: 11px;
+      margin: 0;
       padding: 0;
       line-height: 1.1;
-      flex: 1;
-      text-align: left;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .image-qr-row {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      gap: 2px;
+      margin-top: 2px;
     }
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 3.5cm !important;
-      height: 3.5cm !important;
-      border-radius: 4px;
-      object-fit: contain;
+      width: 2cm !important;
+      height: 2cm !important;
+      border-radius: 5px;
+      object-fit: cover;
     }
     #qr-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
     }
 
-    /* --- الطباعة A4 مع تصغير الحجم --- */
+    /* --- التعديلات للطباعة ليبل بصفحة مستقلة بشكل مستطيل --- */
     @media print {
       body * {
         visibility: hidden;
@@ -98,44 +91,44 @@
         visibility: visible;
       }
       #qr-container {
-        width: 210mm;
-        height: 297mm;
+        display: block;
         padding: 0;
         margin: 0;
+        width: 100vw;
+        height: 100vh;
       }
       .qr-box {
-        width: 100mm !important;  /* 10 سم */
-        height: 70mm !important;  /* 7 سم */
-        margin: 10mm auto !important;
-        padding: 5mm !important;
+        width: 18cm !important;   /* عرض مستطيل مناسب */
+        height: 10cm !important;  /* ارتفاع مناسب */
+        margin: auto !important;
+        padding: 1cm !important;
         border: 1px solid black !important;
         box-sizing: border-box;
-        page-break-after: always;
-        font-size: 12px !important;
-        flex-direction: row !important;
+        page-break-after: always;  /* كل ليبل في صفحة مستقلة */
+        display: flex !important;
+        flex-direction: row !important; /* جعل الصورة وQR بجانب بعض */
         justify-content: space-around !important;
         align-items: center !important;
+        font-size: 14px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        font-size: 14px !important;
-        margin: 0 10px 0 0 !important;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        flex: 1;
-        text-align: left;
+        font-size: 20px !important;
+        margin-bottom: 0.5cm !important;
+        flex-basis: 100%;
       }
+      /* عرض الصورة والQR بشكل أكبر بجانب بعض */
       .image-qr-row {
-        flex-direction: column !important;
-        gap: 4px !important;
+        flex-direction: row !important;
+        gap: 2cm !important;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 3.5cm !important;
-        height: 3.5cm !important;
-        border-radius: 4px !important;
+        width: 6cm !important;
+        height: 6cm !important;
+        border-radius: 5px !important;
       }
+      /* إظهار الاسم فقط مع الصورة والQR */
       .qr-box > div:not(.image-qr-row), .qr-box h3 {
         display: block !important;
       }
