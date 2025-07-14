@@ -169,6 +169,7 @@
       <option>فحص عادي</option>
     </select>
     <label>تأريخ تدريب السلامة</label><input type="date" id="trainingDate">
+    <label>نوع العمل</label><input type="text" id="jobType"> <!-- جديد -->
     <label>رقم القفل</label><input type="text" id="lockNumber">
     <label>رفع صورة</label><input type="file" id="photoInput" accept="image/*">
     <button onclick="generateManualQR()">توليد رمز QR</button>
@@ -256,6 +257,7 @@
         "تأريخ الفحص": document.getElementById('testDate').value,
         "نوع الفحص": document.getElementById('testType').value,
         "تأريخ تدريب السلامة": document.getElementById('trainingDate').value,
+        "نوع العمل": document.getElementById('jobType').value,
         "رقم القفل": document.getElementById('lockNumber').value,
         "الصورة": uploadedImageData
       };
@@ -284,6 +286,7 @@
 تأريخ الفحص: ${data["تأريخ الفحص"]}
 نوع الفحص: ${data["نوع الفحص"]}
 تأريخ تدريب السلامة: ${data["تأريخ تدريب السلامة"]}
+نوع العمل: ${data["نوع العمل"]}
 رقم القفل: ${data["رقم القفل"]}
 تأريخ الانتهاء: ${fixedExpireDate}`;
 
