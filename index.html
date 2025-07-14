@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KCML KSD - QR Generator</title>
+  <title>KCML KSD - QR Generator صغير</title>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
@@ -11,69 +11,71 @@
       font-family: Tahoma, sans-serif;
       direction: rtl;
       background-color: #f0fdf4;
-      padding: 20px;
+      padding: 10px;
+      font-size: 10px;
     }
     h2 {
       text-align: center;
       color: #15803d;
+      font-size: 16px;
     }
     label {
       display: block;
-      margin-top: 10px;
+      margin-top: 8px;
       color: #065f46;
+      font-size: 10px;
     }
-    input, select, textarea {
+    input, select, textarea, button {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
+      padding: 6px;
+      margin-top: 4px;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 6px;
       box-sizing: border-box;
+      font-size: 10px;
     }
     button {
-      margin-top: 15px;
       background-color: #15803d;
       color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      width: 100%;
-      font-size: 16px;
       cursor: pointer;
     }
     .qr-box {
-      width: 5cm;
+      width: 6cm;
+      height: 4cm;
       background-color: white;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 6px;
       padding: 4px;
-      margin: 6px;
+      margin: 4px auto;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: start;
+      justify-content: center;
       text-align: center;
-      font-size: 10px;
+      font-size: 9px;
     }
     .qr-box h3 {
       font-size: 11px;
-      margin: 0;
+      margin: 0 0 4px 0;
       padding: 0;
       line-height: 1.1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
     .image-qr-row {
       display: flex;
+      gap: 6px;
       justify-content: center;
       align-items: center;
-      gap: 2px;
-      margin-top: 2px;
     }
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 2cm !important;
-      height: 2cm !important;
-      border-radius: 5px;
+      width: 1.5cm !important;
+      height: 1.5cm !important;
+      border-radius: 4px;
       object-fit: cover;
     }
     #qr-container {
@@ -82,7 +84,6 @@
       justify-content: center;
     }
 
-    /* --- التعديلات للطباعة بحجم 6x4 سم ليبل بصفحة مستقلة --- */
     @media print {
       body * {
         visibility: hidden;
@@ -101,60 +102,41 @@
         width: 6cm !important;
         height: 4cm !important;
         margin: auto !important;
-        padding: 4px !important;
+        padding: 0.3cm !important;
         border: 1px solid black !important;
         box-sizing: border-box;
         page-break-after: always;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        align-items: center !important;
-        font-size: 8px !important;
+        font-size: 11px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        font-size: 10px !important;
-        margin-bottom: 2px !important;
-        text-align: center;
-      }
-      .image-qr-row {
-        flex-direction: row !important;
-        gap: 4px !important;
-        justify-content: center !important;
-        align-items: center !important;
+        font-size: 12px !important;
+        margin-bottom: 0.2cm !important;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 2cm !important;
-        height: 2cm !important;
-        border-radius: 3px !important;
-      }
-      /* إظهار فقط الاسم، الصورة، والـQR */
-      .qr-box > div:not(.image-qr-row), .qr-box h3 {
-        display: block !important;
-      }
-      .qr-box > div:not(.image-qr-row) {
-        display: none !important;
+        width: 1.8cm !important;
+        height: 1.8cm !important;
       }
     }
   </style>
 </head>
 <body>
 
-  <h2>KCML KSD - فحص السلامة</h2>
+  <h2>KCML KSD - فحص السلامة صغير</h2>
 
   <!-- القسم 1️⃣ تحويل صورة إلى Base64 -->
-  <div style="max-width: 600px; margin: auto;">
+  <div style="max-width: 400px; margin: auto;">
     <h3>1️⃣ تحويل صورة إلى Base64</h3>
     <input type="file" id="convertBase64Input" accept="image/*">
-    <textarea id="base64Result" readonly placeholder="سيظهر هنا كود Base64. انسخه وضعه داخل ملف Excel."></textarea>
+    <textarea id="base64Result" readonly placeholder="سيظهر هنا كود Base64. انسخه وضعه داخل ملف Excel." style="height:80px;"></textarea>
     <button onclick="copyBase64()">📋 نسخ الكود</button>
   </div>
 
   <hr>
 
   <!-- القسم 2️⃣ إدخال يدوي -->
-  <div style="max-width: 600px; margin: auto;">
+  <div style="max-width: 400px; margin: auto;">
     <h3>2️⃣ إدخال يدوي</h3>
     <label>نوع الخط</label>
     <select id="lineType">
@@ -196,9 +178,9 @@
   <hr>
 
   <!-- القسم 3️⃣ رفع ملف Excel -->
-  <h2>3️⃣ رفع ملف Excel</h2>
-  <input type="file" id="fileInput" accept=".xlsx" />
-  <button onclick="window.print()">🖨️ طباعة الكل</button>
+  <h2 style="font-size:14px;">3️⃣ رفع ملف Excel</h2>
+  <input type="file" id="fileInput" accept=".xlsx" style="max-width: 400px; margin: auto; display: block;" />
+  <button onclick="window.print()" style="max-width: 400px; margin: 10px auto; display: block;">🖨️ طباعة الكل</button>
 
   <div id="qr-container"></div>
 
@@ -317,7 +299,7 @@
       box.className = 'qr-box';
 
       const title = document.createElement('h3');
-      title.textContent = data["الاسم"];
+      title.textContent = data["الاسم"] || 'بدون اسم';
       box.appendChild(title);
 
       const row = document.createElement('div');
@@ -335,7 +317,7 @@
 
       document.getElementById('qr-container').appendChild(box);
 
-      QRCode.toCanvas(canvas, info, function (error) {
+      QRCode.toCanvas(canvas, info, { width: 100, margin: 1 }, function (error) {
         if (error) console.error("خطأ في توليد QR:", error);
       });
     }
