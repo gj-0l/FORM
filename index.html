@@ -82,7 +82,7 @@
       justify-content: center;
     }
 
-    /* --- التعديلات للطباعة ليبل بصفحة مستقلة بشكل مستطيل --- */
+    /* --- التعديلات للطباعة بحجم 6x4 سم ليبل بصفحة مستقلة --- */
     @media print {
       body * {
         visibility: hidden;
@@ -98,37 +98,38 @@
         height: 100vh;
       }
       .qr-box {
-        width: 18cm !important;   /* عرض مستطيل مناسب */
-        height: 10cm !important;  /* ارتفاع مناسب */
+        width: 6cm !important;
+        height: 4cm !important;
         margin: auto !important;
-        padding: 1cm !important;
+        padding: 4px !important;
         border: 1px solid black !important;
         box-sizing: border-box;
-        page-break-after: always;  /* كل ليبل في صفحة مستقلة */
+        page-break-after: always;
         display: flex !important;
-        flex-direction: row !important; /* جعل الصورة وQR بجانب بعض */
-        justify-content: space-around !important;
+        flex-direction: column !important;
+        justify-content: center !important;
         align-items: center !important;
-        font-size: 14px !important;
+        font-size: 8px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        font-size: 20px !important;
-        margin-bottom: 0.5cm !important;
-        flex-basis: 100%;
+        font-size: 10px !important;
+        margin-bottom: 2px !important;
+        text-align: center;
       }
-      /* عرض الصورة والQR بشكل أكبر بجانب بعض */
       .image-qr-row {
         flex-direction: row !important;
-        gap: 2cm !important;
+        gap: 4px !important;
+        justify-content: center !important;
+        align-items: center !important;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 6cm !important;
-        height: 6cm !important;
-        border-radius: 5px !important;
+        width: 2cm !important;
+        height: 2cm !important;
+        border-radius: 3px !important;
       }
-      /* إظهار الاسم فقط مع الصورة والQR */
+      /* إظهار فقط الاسم، الصورة، والـQR */
       .qr-box > div:not(.image-qr-row), .qr-box h3 {
         display: block !important;
       }
