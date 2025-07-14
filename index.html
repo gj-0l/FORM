@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>طباعة بطاقات QR</title>
+  <title>طباعة بطاقات QR بحجم صغير</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
     body {
@@ -75,43 +75,43 @@
       #qr-container,
       #qr-container .qr-box {
         visibility: visible;
-        display: block;
-        position: relative;
-        page-break-after: always;
-        width: 100%;
+        display: inline-block;
+        width: 6cm;          /* عرض أصغر */
+        margin: 5px;
+        page-break-inside: avoid; /* لا تكسر البطاقة داخل الصفحة */
+        vertical-align: top;
         text-align: center;
       }
       .qr-box {
-        margin: auto;
-        padding-top: 6cm;
-        font-size: 22px;
+        padding: 10px;
+        font-size: 12px !important;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: white;
       }
       .qr-box * {
-        display: none !important;
-      }
-      .qr-box h3,
-      .qr-box .image-qr-row {
         display: block !important;
         visibility: visible !important;
       }
       .qr-box h3 {
-        margin-bottom: 20px;
+        font-size: 14px !important;
+        margin-bottom: 6px;
       }
       .image-qr-row {
         justify-content: center;
-        gap: 20px;
+        gap: 8px;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 4cm !important;
-        height: 4cm !important;
+        width: 2.5cm !important;
+        height: 2.5cm !important;
       }
     }
   </style>
 </head>
 <body>
 
-  <h2>إنشاء وطباعة بطاقات QR</h2>
+  <h2>إنشاء وطباعة بطاقات QR بحجم صغير</h2>
   <button onclick="addSampleCard()">إنشاء بطاقة تجريبية</button>
   <button onclick="window.print()">🖨️ طباعة البطاقات</button>
 
@@ -119,13 +119,13 @@
 
   <script>
     // مثال على صورة صغيرة مضمنة (Base64) لتسهيل التجربة:
-    const sampleImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABGUlEQVR4nO3RQQ3AIBAEQcsDhvr0TsT8OEAlKyibcwOuQZthb+Xn6CpgBqHTIBxy4QDYIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIDAH0AxmY8PYX4oDAAAAAElFTkSuQmCC";
+    const sampleImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABGUlEQVR4nO3RQQ3AIBAEQcsDhvr0TsT8OEAlKyibcwOuQZthb+Xn6CpgBqHTIBxy4QDYIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIAQDAIDAH0AxmY8PYX4oDAAAAAElFTkSuQmCC";
 
     function addSampleCard() {
       const data = {
         "الاسم": "أحمد علي",
         "الصورة": sampleImageBase64,
-        "بيانات": "هذه بيانات مشفرة في رمز QR" // يمكن تعديلها حسب الحاجة
+        "بيانات": "هذه بيانات مشفرة في رمز QR" // يمكنك تعديل النص هنا لرمز QR
       };
       createQRBox(data);
     }
