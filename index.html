@@ -107,25 +107,29 @@
         box-sizing: border-box;
         page-break-after: always;
         display: flex !important;
-        flex-direction: row !important;
+        flex-direction: column !important;
         justify-content: center !important;
         align-items: center !important;
         font-size: 11px !important;
         background-color: white !important;
+        text-align: center !important;
       }
       .qr-box h3 {
-        display: none !important;
+        display: block !important;
+        margin-bottom: 5px !important;
+        font-size: 12px !important;
       }
       .image-qr-row {
-        flex-direction: row !important;
-        gap: 0.3cm !important;
+        flex-direction: column !important;
+        gap: 0 !important;
         justify-content: center !important;
         align-items: center !important;
         width: 100% !important;
-        height: auto !important;
         margin: 0 !important;
       }
-      .image-qr-row img,
+      .image-qr-row img {
+        display: none !important;
+      }
       .image-qr-row canvas {
         width: 3cm !important;
         height: 3cm !important;
@@ -134,9 +138,6 @@
         margin: 0 !important;
         padding: 0 !important;
         border: none !important;
-      }
-      .qr-box > div:not(.image-qr-row) {
-        display: none !important;
       }
     }
   </style>
@@ -278,7 +279,6 @@
     });
 
     function createQRBox(data) {
-      // تأكد من وجود كل الحقول وإعطاء قيمة افتراضية فارغة إذا لم توجد (لمنع الأخطاء)
       const lineType = data["نوع الخط"] || "";
       const name = data["الاسم"] || "";
       const company = data["اسم الشركة"] || "";
@@ -291,7 +291,7 @@
       const image = data["الصورة"] || "";
 
       const info =
-        `نوع الخط: ${lineType}
+`نوع الخط: ${lineType}
 الاسم: ${name}
 اسم الشركة: ${company}
 العمر: ${age}
