@@ -42,47 +42,54 @@
       cursor: pointer;
     }
     .qr-box {
-      width: 5cm;
+      width: 10cm;
+      height: 7cm;
       background-color: white;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 4px;
-      margin: 6px;
+      border-radius: 6px;
+      padding: 6px;
+      margin: 6px auto;
       box-sizing: border-box;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      justify-content: start;
+      justify-content: space-around;
+      font-size: 8px;
       text-align: center;
-      font-size: 10px;
     }
     .qr-box h3 {
-      font-size: 11px;
-      margin: 0;
+      font-size: 12px;
+      margin: 0 10px 0 0;
       padding: 0;
       line-height: 1.1;
+      flex: 1;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .image-qr-row {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
       align-items: center;
-      gap: 2px;
-      margin-top: 2px;
+      justify-content: center;
     }
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 2cm !important;
-      height: 2cm !important;
-      border-radius: 5px;
-      object-fit: cover;
+      width: 3.5cm !important;
+      height: 3.5cm !important;
+      border-radius: 4px;
+      object-fit: contain;
     }
     #qr-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      gap: 10px;
     }
 
-    /* --- التعديلات للطباعة ليبل بصفحة مستقلة بشكل A4 --- */
+    /* --- الطباعة A4 مع تصغير الحجم --- */
     @media print {
       body * {
         visibility: hidden;
@@ -91,46 +98,44 @@
         visibility: visible;
       }
       #qr-container {
-        display: block;
+        width: 210mm;
+        height: 297mm;
         padding: 0;
         margin: 0;
-        width: 210mm;   /* عرض ورقة A4 */
-        height: 297mm;  /* ارتفاع ورقة A4 */
       }
       .qr-box {
-        width: 180mm !important;   /* عرض الليبل داخل الورقة */
-        height: 260mm !important;  /* ارتفاع الليبل */
-        margin: 18.5mm auto !important;  /* هامش من الأعلى والأسفل لتوسيط الليبل */
-        padding: 15mm !important;
+        width: 100mm !important;  /* 10 سم */
+        height: 70mm !important;  /* 7 سم */
+        margin: 10mm auto !important;
+        padding: 5mm !important;
         border: 1px solid black !important;
         box-sizing: border-box;
-        page-break-after: always;  /* كل ليبل في صفحة مستقلة */
-        display: flex !important;
-        flex-direction: column !important; /* عمودي */
-        justify-content: center !important;
+        page-break-after: always;
+        font-size: 12px !important;
+        flex-direction: row !important;
+        justify-content: space-around !important;
         align-items: center !important;
-        font-size: 18px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        font-size: 26px !important;
-        margin-bottom: 1cm !important;
-        text-align: center;
+        font-size: 14px !important;
+        margin: 0 10px 0 0 !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
+        text-align: left;
       }
       .image-qr-row {
-        flex-direction: row !important;
-        gap: 2cm !important;
-        justify-content: center !important;
-        align-items: center !important;
+        flex-direction: column !important;
+        gap: 4px !important;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 8cm !important;
-        height: 8cm !important;
-        border-radius: 8px !important;
-        object-fit: contain !important;
+        width: 3.5cm !important;
+        height: 3.5cm !important;
+        border-radius: 4px !important;
       }
-      /* إظهار فقط الاسم مع الصورة والQR */
       .qr-box > div:not(.image-qr-row), .qr-box h3 {
         display: block !important;
       }
