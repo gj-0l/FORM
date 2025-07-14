@@ -82,10 +82,12 @@
       justify-content: center;
     }
 
-    /* --- التعديلات للطباعة ليبل بحجم 20x10 سم --- */
+    /* --- الطباعة: حجم ليبل 5x10 سم بدون هوامش أو حشوة --- */
     @media print {
       body * {
         visibility: hidden;
+        margin: 0;
+        padding: 0;
       }
       #qr-container, #qr-container * {
         visibility: visible;
@@ -98,40 +100,44 @@
         height: 100vh;
       }
       .qr-box {
-        width: 20cm !important;    /* العرض */
-        height: 10cm !important;   /* الارتفاع */
-        margin: auto !important;
-        padding: 0.8cm 1cm !important;
-        border: 1px solid black !important;
+        width: 5cm !important;    /* العرض */
+        height: 10cm !important;  /* الارتفاع */
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
         box-sizing: border-box;
-        page-break-after: always;  /* كل ليبل في صفحة مستقلة */
+        page-break-after: always; /* كل ليبل في صفحة مستقلة */
         display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-around !important;
+        flex-direction: column !important;
+        justify-content: center !important;
         align-items: center !important;
-        font-size: 14px !important;
+        font-size: 12px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        font-size: 20px !important;
-        margin: 0 !important;
-        flex-basis: 40% !important;
+        font-size: 14px !important;
+        margin: 0 0 0.3cm 0 !important;
+        padding: 0 !important;
         text-align: center !important;
       }
       .image-qr-row {
-        flex-direction: row !important;
-        gap: 1cm !important;
+        flex-direction: column !important;
+        gap: 0.3cm !important;
         justify-content: center !important;
         align-items: center !important;
-        width: 55% !important;
+        width: 100% !important;
         height: auto !important;
+        margin: 0 !important;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 6cm !important;
-        height: 6cm !important;
-        border-radius: 8px !important;
+        width: 4.5cm !important;
+        height: 4.5cm !important;
+        border-radius: 0 !important;
         object-fit: contain !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
       }
       /* إظهار فقط الاسم، الصورة، والQR */
       .qr-box > div:not(.image-qr-row), .qr-box h3 {
