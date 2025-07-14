@@ -42,12 +42,12 @@
       cursor: pointer;
     }
     .qr-box {
-      width: 5cm;
+      width: 6cm;
       background-color: white;
       border: 1px solid #ccc;
       border-radius: 8px;
-      padding: 4px;
-      margin: 6px;
+      padding: 6px;
+      margin: 10px auto;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -57,8 +57,8 @@
       font-size: 10px;
     }
     .qr-box h3 {
-      font-size: 11px;
-      margin: 0;
+      font-size: 14px;
+      margin: 0 0 5px 0;
       padding: 0;
       line-height: 1.1;
     }
@@ -66,14 +66,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 2px;
-      margin-top: 2px;
+      gap: 4px;
+      margin-top: 5px;
     }
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 2cm !important;
-      height: 2cm !important;
-      border-radius: 5px;
+      width: 3cm !important;
+      height: 3cm !important;
+      border-radius: 6px;
       object-fit: cover;
     }
     #qr-container {
@@ -87,17 +87,27 @@
         display: none !important;
       }
 
-      #qr-container, #qr-container * {
+      #qr-container,
+      #qr-container * {
         display: block !important;
         visibility: visible !important;
       }
 
+      #qr-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
       .qr-box {
-        width: 9cm;
-        margin: 1cm auto;
+        width: 10cm;
         font-size: 14px;
         border: none;
-        page-break-inside: avoid;
+        page-break-after: always;
+        margin: 0 auto;
       }
 
       .qr-box h3 {
@@ -113,8 +123,8 @@
 
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 5cm !important;
-        height: 5cm !important;
+        width: 4cm !important;
+        height: 4cm !important;
       }
     }
   </style>
@@ -196,13 +206,11 @@
           const canvas = document.createElement("canvas");
           const maxSize = 150;
           let width = img.width, height = img.height;
-
           if (width > height) {
             if (width > maxSize) { height *= maxSize / width; width = maxSize; }
           } else {
             if (height > maxSize) { width *= maxSize / height; height = maxSize; }
           }
-
           canvas.width = width;
           canvas.height = height;
           const ctx = canvas.getContext("2d");
@@ -233,13 +241,11 @@
           const canvas = document.createElement("canvas");
           const maxSize = 150;
           let width = img.width, height = img.height;
-
           if (width > height) {
             if (width > maxSize) { height *= maxSize / width; width = maxSize; }
           } else {
             if (height > maxSize) { width *= maxSize / height; height = maxSize; }
           }
-
           canvas.width = width;
           canvas.height = height;
           const ctx = canvas.getContext("2d");
