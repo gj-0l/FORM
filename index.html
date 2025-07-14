@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>KCML KSD - QR Generator</title>
+<title>KCML KSD - QR Generator - Label صغير</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <style>
@@ -40,25 +40,25 @@
     margin-top: 20px;
   }
   .qr-box {
-    width: 6cm;
-    height: 8cm;
+    width: 3.5cm;
+    height: 4.5cm;
     background: white;
     border: 1px solid #999;
-    border-radius: 8px;
-    padding: 10px 8px;
+    border-radius: 6px;
+    padding: 6px 5px;
     box-sizing: border-box;
     text-align: center;
-    font-size: 12px;
+    font-size: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
     user-select: none;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     page-break-after: always; /* كل ليبل صفحة منفصلة */
   }
   .qr-box h3 {
-    margin: 6px 0 10px 0;
-    font-size: 14px;
+    margin: 4px 0 6px 0;
+    font-size: 9px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -68,13 +68,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
   .image-qr-row img,
   .image-qr-row canvas {
-    width: 3.5cm !important;
-    height: 3.5cm !important;
-    border-radius: 6px;
+    width: 1.8cm !important;
+    height: 1.8cm !important;
+    border-radius: 4px;
     object-fit: cover;
   }
   /* طباعة */
@@ -95,11 +95,11 @@
       display: block;
     }
     .qr-box {
-      margin: 0 auto 10mm auto;
-      width: 6cm !important;
-      height: 8cm !important;
-      font-size: 12px !important;
-      padding: 10px 8px !important;
+      margin: 0 auto 8mm auto;
+      width: 3.5cm !important;
+      height: 4.5cm !important;
+      font-size: 8px !important;
+      padding: 6px 5px !important;
       border: 1px solid black !important;
       box-sizing: border-box;
       page-break-after: always;
@@ -108,26 +108,25 @@
       align-items: center !important;
     }
     .qr-box h3 {
-      font-size: 14px !important;
-      margin-bottom: 10px !important;
+      font-size: 9px !important;
+      margin-bottom: 6px !important;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 3.5cm !important;
-      height: 3.5cm !important;
-      border-radius: 6px !important;
+      width: 1.8cm !important;
+      height: 1.8cm !important;
+      border-radius: 4px !important;
     }
   }
 </style>
 </head>
 <body>
 
-<h2>KCML KSD - فحص السلامة</h2>
+<h2>KCML KSD - فحص السلامة (ليبل صغير)</h2>
 
-<!-- رفع ملف Excel -->
 <div style="max-width: 600px; margin: auto;">
   <h3>رفع ملف Excel</h3>
   <input type="file" id="fileInput" accept=".xlsx" />
@@ -155,7 +154,6 @@
   });
 
   function createQRBox(data) {
-    // نص رمز QR مبني من بيانات السجل
     const info =
       `نوع الخط: ${data["نوع الخط"] || ''}
 الاسم: ${data["الاسم"] || ''}
