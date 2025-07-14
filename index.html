@@ -40,25 +40,27 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    gap: 6px;
+    gap: 10px;
   }
   .qr-box {
-    width: 3.2cm;
+    width: 6cm;
+    height: 8cm;
     background: white;
     border: 1px solid #999;
-    border-radius: 6px;
-    padding: 4px 4px 6px 4px;
+    border-radius: 8px;
+    padding: 10px 8px;
     box-sizing: border-box;
     text-align: center;
-    font-size: 8px;
+    font-size: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
     user-select: none;
+    page-break-after: always; /* لكل ليبل صفحة منفصلة */
   }
   .qr-box h3 {
-    margin: 2px 0 4px 0;
-    font-size: 9px;
+    margin: 6px 0 10px 0;
+    font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -68,13 +70,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
   }
   .image-qr-row img,
   .image-qr-row canvas {
-    width: 1.4cm !important;
-    height: 1.4cm !important;
-    border-radius: 4px;
+    width: 3.5cm !important;
+    height: 3.5cm !important;
+    border-radius: 6px;
     object-fit: cover;
   }
   /* طباعة */
@@ -90,36 +92,38 @@
       top: 0;
       left: 0;
       width: 100%;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      gap: 5mm;
       padding: 0;
       margin: 0;
+      display: block;
     }
     .qr-box {
-      width: 3.2cm !important;
-      font-size: 8px !important;
-      padding: 5px !important;
+      width: 6cm !important;
+      height: 8cm !important;
+      font-size: 12px !important;
+      padding: 10px 8px !important;
       border: 1px solid black !important;
       box-sizing: border-box;
-      page-break-inside: avoid;
+      page-break-after: always;
+      margin: 0 auto 10mm auto;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
     }
     .qr-box h3 {
-      font-size: 9px !important;
-      margin-bottom: 3px !important;
+      font-size: 14px !important;
+      margin-bottom: 10px !important;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .qr-box > div:not(.image-qr-row) {
-      display: none !important;
-    }
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 1.5cm !important;
-      height: 1.5cm !important;
-      border-radius: 3px !important;
+      width: 3.5cm !important;
+      height: 3.5cm !important;
+      border-radius: 6px !important;
+    }
+    .qr-box > div:not(.image-qr-row) {
+      display: none !important;
     }
   }
 </style>
@@ -202,11 +206,8 @@
         const canvas = document.createElement("canvas");
         const maxSize = 150;
         let width = img.width, height = img.height;
-        if (width > height) {
-          if (width > maxSize) { height *= maxSize / width; width = maxSize; }
-        } else {
-          if (height > maxSize) { width *= maxSize / height; height = maxSize; }
-        }
+        if (width > height) { if (width > maxSize) { height *= maxSize / width; width = maxSize; } }
+        else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext("2d");
@@ -227,7 +228,7 @@
     alert("✅ تم نسخ الكود!");
   }
 
-  // رفع صورة مضغوطة من إدخال يدوي
+  // رفع صورة مضغوطة من الإدخال اليدوي
   document.getElementById('photoInput').addEventListener('change', function (event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -238,11 +239,8 @@
         const canvas = document.createElement("canvas");
         const maxSize = 150;
         let width = img.width, height = img.height;
-        if (width > height) {
-          if (width > maxSize) { height *= maxSize / width; width = maxSize; }
-        } else {
-          if (height > maxSize) { width *= maxSize / height; height = maxSize; }
-        }
+        if (width > height) { if (width > maxSize) { height *= maxSize / width; width = maxSize; } }
+        else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext("2d");
@@ -284,7 +282,7 @@
     reader.readAsArrayBuffer(file);
   });
 
-  // إنشاء بطاقة QR صغيرة الحجم (ليبل)
+  // إنشاء بطاقة QR
   function createQRBox(data) {
     const info =
       `نوع الخط: ${data["نوع الخط"]}
@@ -295,7 +293,7 @@
 نوع الفحص: ${data["نوع الفحص"]}
 تأريخ تدريب السلامة: ${data["تأريخ تدريب السلامة"]}
 رقم القفل: ${data["رقم القفل"]}
-تأريخ الانتهاء: 2025-08-01`;
+تأريخ الانتهاء: ${fixedExpireDate}`;
 
     const box = document.createElement('div');
     box.className = 'qr-box';
