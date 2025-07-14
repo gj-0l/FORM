@@ -42,8 +42,8 @@
       cursor: pointer;
     }
     .qr-box {
-      width: 4.5cm;
-      height: 4.5cm;
+      width: 5cm;
+      height: 5cm;
       background-color: white;
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -70,8 +70,8 @@
     }
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 2.2cm !important;
-      height: 2.2cm !important;
+      width: 2.4cm !important;
+      height: 2.4cm !important;
       object-fit: cover;
       border-radius: 5px;
     }
@@ -81,7 +81,7 @@
       justify-content: center;
     }
 
-    /* ✅ الطباعة 4.5x4.5 بدون اسم */
+    /* ✅ الطباعة 5x5 بدون الاسم */
     @media print {
       body * {
         visibility: hidden;
@@ -97,8 +97,8 @@
         margin: 0;
       }
       .qr-box {
-        width: 4.5cm !important;
-        height: 4.5cm !important;
+        width: 5cm !important;
+        height: 5cm !important;
         margin: 0 !important;
         padding: 0.2cm !important;
         page-break-after: always;
@@ -117,8 +117,8 @@
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 2.2cm !important;
-        height: 2.2cm !important;
+        width: 2.4cm !important;
+        height: 2.4cm !important;
       }
     }
   </style>
