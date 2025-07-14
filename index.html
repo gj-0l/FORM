@@ -82,7 +82,7 @@
       justify-content: center;
     }
 
-    /* --- الطباعة: ليبل عرضي 5×5 سم بدون هوامش أو حشوة --- */
+    /* --- الطباعة: ليبل عرضي 5×5 سم بدون الاسم --- */
     @media print {
       body * {
         visibility: hidden;
@@ -109,25 +109,20 @@
         page-break-after: always; /* كل ليبل في صفحة مستقلة */
         display: flex !important;
         flex-direction: row !important; /* أفقي */
-        justify-content: space-around !important;
+        justify-content: center !important;
         align-items: center !important;
         font-size: 12px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        font-size: 14px !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        flex-basis: 40% !important;
-        text-align: center !important;
-        overflow-wrap: break-word;
+        display: none !important; /* إخفاء الاسم تمامًا */
       }
       .image-qr-row {
         flex-direction: row !important;
         gap: 0.3cm !important;
         justify-content: center !important;
         align-items: center !important;
-        width: 50% !important;
+        width: 100% !important;
         height: auto !important;
         margin: 0 !important;
       }
@@ -141,10 +136,7 @@
         padding: 0 !important;
         border: none !important;
       }
-      /* إظهار فقط الاسم، الصورة، والQR */
-      .qr-box > div:not(.image-qr-row), .qr-box h3 {
-        display: block !important;
-      }
+      /* إظهار فقط الصورة والQR */
       .qr-box > div:not(.image-qr-row) {
         display: none !important;
       }
