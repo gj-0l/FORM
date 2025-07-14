@@ -82,7 +82,7 @@
       justify-content: center;
     }
 
-    /* --- التعديلات للطباعة ليبل بصفحة مستقلة بحجم 20x30 سم فقط الاسم والصورة والQR --- */
+    /* --- التعديلات للطباعة ليبل بحجم 20x10 سم --- */
     @media print {
       body * {
         visibility: hidden;
@@ -98,36 +98,38 @@
         height: 100vh;
       }
       .qr-box {
-        width: 20cm !important;   /* العرض المطلوب */
-        height: 30cm !important;  /* الارتفاع المطلوب */
+        width: 20cm !important;    /* العرض */
+        height: 10cm !important;   /* الارتفاع */
         margin: auto !important;
-        padding: 1.5cm !important;
+        padding: 0.8cm 1cm !important;
         border: 1px solid black !important;
         box-sizing: border-box;
         page-break-after: always;  /* كل ليبل في صفحة مستقلة */
         display: flex !important;
-        flex-direction: column !important;
-        justify-content: flex-start !important;
+        flex-direction: row !important;
+        justify-content: space-around !important;
         align-items: center !important;
-        font-size: 18px !important;
+        font-size: 14px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        font-size: 24px !important;
-        margin-bottom: 1.5cm !important;
+        font-size: 20px !important;
+        margin: 0 !important;
+        flex-basis: 40% !important;
+        text-align: center !important;
       }
       .image-qr-row {
         flex-direction: row !important;
-        gap: 3cm !important;
+        gap: 1cm !important;
         justify-content: center !important;
         align-items: center !important;
-        width: 100% !important;
+        width: 55% !important;
         height: auto !important;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 8cm !important;
-        height: 8cm !important;
+        width: 6cm !important;
+        height: 6cm !important;
         border-radius: 8px !important;
         object-fit: contain !important;
       }
