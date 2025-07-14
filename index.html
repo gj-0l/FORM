@@ -54,25 +54,29 @@
       align-items: center;
       justify-content: start;
       text-align: center;
-      font-size: 10px;
+      font-size: 9px; /* تصغير الخط */
     }
     .qr-box h3 {
-      font-size: 11px;
-      margin: 0;
+      font-size: 10px; /* تصغير الاسم */
+      margin: 4px 0;
       padding: 0;
       line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
     .image-qr-row {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 2px;
-      margin-top: 2px;
+      gap: 4px;
+      margin-top: 4px;
     }
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 2cm !important;
-      height: 2cm !important;
+      width: 1.8cm !important; /* تصغير الصورة */
+      height: 1.8cm !important; /* تصغير رمز QR */
       border-radius: 5px;
       object-fit: cover;
     }
@@ -81,7 +85,6 @@
       flex-wrap: wrap;
       justify-content: center;
     }
-    /* --- التعديلات للطباعة --- */
     @media print {
       body * {
         visibility: hidden;
@@ -102,25 +105,27 @@
         margin: 0;
       }
       .qr-box {
-        width: 6cm !important;
-        font-size: 10px !important;
+        width: 5.5cm !important;
+        font-size: 9px !important;
         padding: 6px !important;
         border: 1px solid black !important;
         box-sizing: border-box;
         page-break-inside: avoid;
       }
       .qr-box h3 {
-        font-size: 12px !important;
+        font-size: 11px !important; /* تصغير الاسم */
         margin-bottom: 4px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
-      /* اخفاء اي عناصر غير الاسم + الصورة + رمز QR */
       .qr-box > div:not(.image-qr-row) {
         display: none !important;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 3.5cm !important;
-        height: 3.5cm !important;
+        width: 2cm !important; /* تصغير الصورة والباركورد */
+        height: 2cm !important;
         border-radius: 3px !important;
       }
     }
