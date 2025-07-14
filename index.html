@@ -82,7 +82,6 @@
       justify-content: center;
     }
 
-    /* --- الطباعة: ليبل عرضي 5×5 سم بدون الاسم --- */
     @media print {
       body * {
         visibility: hidden;
@@ -100,22 +99,22 @@
         height: 100vh;
       }
       .qr-box {
-        width: 5cm !important;    /* العرض */
-        height: 5cm !important;   /* الارتفاع */
+        width: 5cm !important;
+        height: 5cm !important;
         margin: 0 !important;
         padding: 0.3cm !important;
         border: none !important;
         box-sizing: border-box;
-        page-break-after: always; /* كل ليبل في صفحة مستقلة */
+        page-break-after: always;
         display: flex !important;
-        flex-direction: row !important; /* أفقي */
+        flex-direction: row !important;
         justify-content: center !important;
         align-items: center !important;
-        font-size: 12px !important;
+        font-size: 11px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        display: none !important; /* إخفاء الاسم تمامًا */
+        display: none !important;
       }
       .image-qr-row {
         flex-direction: row !important;
@@ -128,15 +127,14 @@
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 3.5cm !important;
-        height: 3.5cm !important;
+        width: 3cm !important;
+        height: 3cm !important;
         border-radius: 0 !important;
         object-fit: contain !important;
         margin: 0 !important;
         padding: 0 !important;
         border: none !important;
       }
-      /* إظهار فقط الصورة والQR */
       .qr-box > div:not(.image-qr-row) {
         display: none !important;
       }
@@ -147,7 +145,6 @@
 
   <h2>KCML KSD - فحص السلامة</h2>
 
-  <!-- القسم 1️⃣ تحويل صورة إلى Base64 -->
   <div style="max-width: 600px; margin: auto;">
     <h3>1️⃣ تحويل صورة إلى Base64</h3>
     <input type="file" id="convertBase64Input" accept="image/*">
@@ -157,49 +154,28 @@
 
   <hr>
 
-  <!-- القسم 2️⃣ إدخال يدوي -->
   <div style="max-width: 600px; margin: auto;">
     <h3>2️⃣ إدخال يدوي</h3>
     <label>نوع الخط</label>
-    <select id="lineType">
-      <option>KSD 1</option>
-      <option>KSD 2</option>
-    </select>
-
-    <label>الاسم</label>
-    <input type="text" id="name">
-
-    <label>اسم الشركة</label>
-    <input type="text" id="company">
-
-    <label>العمر</label>
-    <input type="number" id="age">
-
-    <label>تأريخ الفحص</label>
-    <input type="date" id="testDate">
-
+    <select id="lineType"><option>KSD 1</option><option>KSD 2</option></select>
+    <label>الاسم</label><input type="text" id="name">
+    <label>اسم الشركة</label><input type="text" id="company">
+    <label>العمر</label><input type="number" id="age">
+    <label>تأريخ الفحص</label><input type="date" id="testDate">
     <label>نوع الفحص</label>
     <select id="testType">
       <option>فحص العمل في المرتفعات</option>
       <option>فحص المناطق الضيقة</option>
       <option>فحص عادي</option>
     </select>
-
-    <label>تأريخ تدريب السلامة</label>
-    <input type="date" id="trainingDate">
-
-    <label>رقم القفل</label>
-    <input type="text" id="lockNumber">
-
-    <label>رفع صورة</label>
-    <input type="file" id="photoInput" accept="image/*">
-
+    <label>تأريخ تدريب السلامة</label><input type="date" id="trainingDate">
+    <label>رقم القفل</label><input type="text" id="lockNumber">
+    <label>رفع صورة</label><input type="file" id="photoInput" accept="image/*">
     <button onclick="generateManualQR()">توليد رمز QR</button>
   </div>
 
   <hr>
 
-  <!-- القسم 3️⃣ رفع ملف Excel -->
   <h2>3️⃣ رفع ملف Excel</h2>
   <input type="file" id="fileInput" accept=".xlsx" />
   <button onclick="window.print()">🖨️ طباعة الكل</button>
@@ -210,7 +186,6 @@
     const fixedExpireDate = "2025-08-01";
     let uploadedImageData = "";
 
-    // 1️⃣ تحويل صورة إلى base64 + تقليل الحجم
     document.getElementById("convertBase64Input").addEventListener("change", function (e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -221,13 +196,11 @@
           const canvas = document.createElement("canvas");
           const maxSize = 150;
           let width = img.width, height = img.height;
-
           if (width > height) {
             if (width > maxSize) { height *= maxSize / width; width = maxSize; }
           } else {
             if (height > maxSize) { width *= maxSize / height; height = maxSize; }
           }
-
           canvas.width = width;
           canvas.height = height;
           const ctx = canvas.getContext("2d");
@@ -248,7 +221,6 @@
       alert("✅ تم نسخ الكود!");
     }
 
-    // 2️⃣ إدخال يدوي - رفع صورة مضغوطة
     document.getElementById('photoInput').addEventListener('change', function (event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -259,13 +231,11 @@
           const canvas = document.createElement("canvas");
           const maxSize = 150;
           let width = img.width, height = img.height;
-
           if (width > height) {
             if (width > maxSize) { height *= maxSize / width; width = maxSize; }
           } else {
             if (height > maxSize) { width *= maxSize / height; height = maxSize; }
           }
-
           canvas.width = width;
           canvas.height = height;
           const ctx = canvas.getContext("2d");
