@@ -81,40 +81,33 @@
       flex-wrap: wrap;
       justify-content: center;
     }
-
     @media print {
       body * {
-        display: none !important;
+        visibility: hidden;
       }
-
       #qr-container, #qr-container * {
-        display: block !important;
-        visibility: visible !important;
+        visibility: visible;
       }
-
-      .qr-box {
-        width: 9cm;
-        margin: 1cm auto;
-        font-size: 14px;
-        border: none;
-        page-break-inside: avoid;
-      }
-
-      .qr-box h3 {
-        font-size: 20px;
-        margin-bottom: 10px;
-      }
-
-      .image-qr-row {
-        justify-content: center;
-        gap: 10px;
-        margin-top: 10px;
+      #qr-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
       }
 
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 5cm !important;
-        height: 5cm !important;
+        width: 4cm !important;
+        height: 4cm !important;
+      }
+
+      .qr-box {
+        width: 9cm;
+        font-size: 13px;
+      }
+
+      .qr-box h3 {
+        font-size: 16px;
       }
     }
   </style>
@@ -123,7 +116,7 @@
 
   <h2>KCML KSD - فحص السلامة</h2>
 
-  <!-- تحويل صورة إلى Base64 -->
+  <!-- القسم 1️⃣ تحويل صورة إلى Base64 -->
   <div style="max-width: 600px; margin: auto;">
     <h3>1️⃣ تحويل صورة إلى Base64</h3>
     <input type="file" id="convertBase64Input" accept="image/*">
@@ -133,7 +126,7 @@
 
   <hr>
 
-  <!-- إدخال يدوي -->
+  <!-- القسم 2️⃣ إدخال يدوي -->
   <div style="max-width: 600px; margin: auto;">
     <h3>2️⃣ إدخال يدوي</h3>
     <label>نوع الخط</label>
@@ -175,7 +168,7 @@
 
   <hr>
 
-  <!-- رفع ملف Excel -->
+  <!-- القسم 3️⃣ رفع ملف Excel -->
   <h2>3️⃣ رفع ملف Excel</h2>
   <input type="file" id="fileInput" accept=".xlsx" />
   <button onclick="window.print()">🖨️ طباعة الكل</button>
@@ -186,6 +179,7 @@
     const fixedExpireDate = "2025-08-01";
     let uploadedImageData = "";
 
+    // 1️⃣ تحويل صورة إلى base64 + تقليل الحجم
     document.getElementById("convertBase64Input").addEventListener("change", function (e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -223,6 +217,7 @@
       alert("✅ تم نسخ الكود!");
     }
 
+    // 2️⃣ إدخال يدوي - رفع صورة مضغوطة
     document.getElementById('photoInput').addEventListener('change', function (event) {
       const file = event.target.files[0];
       if (!file) return;
