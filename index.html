@@ -81,6 +81,7 @@
       flex-wrap: wrap;
       justify-content: center;
     }
+    /* --- التعديلات للطباعة --- */
     @media print {
       body * {
         visibility: hidden;
@@ -93,21 +94,34 @@
         top: 0;
         left: 0;
         width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 5mm;
+        padding: 0;
+        margin: 0;
       }
-
+      .qr-box {
+        width: 6cm !important;
+        font-size: 10px !important;
+        padding: 6px !important;
+        border: 1px solid black !important;
+        box-sizing: border-box;
+        page-break-inside: avoid;
+      }
+      .qr-box h3 {
+        font-size: 12px !important;
+        margin-bottom: 4px !important;
+      }
+      /* اخفاء اي عناصر غير الاسم + الصورة + رمز QR */
+      .qr-box > div:not(.image-qr-row) {
+        display: none !important;
+      }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 4cm !important;
-        height: 4cm !important;
-      }
-
-      .qr-box {
-        width: 9cm;
-        font-size: 13px;
-      }
-
-      .qr-box h3 {
-        font-size: 16px;
+        width: 3.5cm !important;
+        height: 3.5cm !important;
+        border-radius: 3px !important;
       }
     }
   </style>
