@@ -82,7 +82,7 @@
       justify-content: center;
     }
 
-    /* --- الطباعة: حجم ليبل 2x5 سم بدون هوامش أو حشوة --- */
+    /* --- الطباعة: ليبل عرضي 5×5 سم بدون هوامش أو حشوة --- */
     @media print {
       body * {
         visibility: hidden;
@@ -100,39 +100,41 @@
         height: 100vh;
       }
       .qr-box {
-        width: 2cm !important;    /* العرض */
+        width: 5cm !important;    /* العرض */
         height: 5cm !important;   /* الارتفاع */
         margin: 0 !important;
-        padding: 0 !important;
+        padding: 0.3cm !important;
         border: none !important;
         box-sizing: border-box;
         page-break-after: always; /* كل ليبل في صفحة مستقلة */
         display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
+        flex-direction: row !important; /* أفقي */
+        justify-content: space-around !important;
         align-items: center !important;
-        font-size: 8px !important;
+        font-size: 12px !important;
         background-color: white !important;
       }
       .qr-box h3 {
-        font-size: 10px !important;
-        margin: 0 0 0.1cm 0 !important;
+        font-size: 14px !important;
+        margin: 0 !important;
         padding: 0 !important;
+        flex-basis: 40% !important;
         text-align: center !important;
+        overflow-wrap: break-word;
       }
       .image-qr-row {
-        flex-direction: column !important;
-        gap: 0.1cm !important;
+        flex-direction: row !important;
+        gap: 0.3cm !important;
         justify-content: center !important;
         align-items: center !important;
-        width: 100% !important;
+        width: 50% !important;
         height: auto !important;
         margin: 0 !important;
       }
       .image-qr-row img,
       .image-qr-row canvas {
-        width: 1.8cm !important;
-        height: 1.8cm !important;
+        width: 3.5cm !important;
+        height: 3.5cm !important;
         border-radius: 0 !important;
         object-fit: contain !important;
         margin: 0 !important;
