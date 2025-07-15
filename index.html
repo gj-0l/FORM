@@ -46,15 +46,16 @@
       cursor: pointer;
     }
 
-    .page {
+    #qr-container {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, 1fr); /* 4 بطاقات في الصف */
       gap: 0.3cm;
+      justify-content: center;
+      align-items: center;
       width: 21cm;
-      height: 29.7cm;
       margin: auto;
+      padding: 0;
       box-sizing: border-box;
-      page-break-after: always;
     }
 
     .qr-box {
@@ -71,6 +72,9 @@
       justify-content: start;
       text-align: center;
       font-size: 10px;
+      margin: 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     .qr-box h3 {
@@ -97,14 +101,54 @@
     @media print {
       body * {
         visibility: hidden;
+        margin: 0;
+        padding: 0;
       }
 
-      .page, .page * {
+      #qr-container, #qr-container * {
         visibility: visible;
       }
 
-      .page {
+      #qr-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.3cm;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
         page-break-after: always;
+      }
+
+      .qr-box {
+        width: 5cm !important;
+        height: 5cm !important;
+        padding: 0.3cm !important;
+        margin: 0 !important;
+        border: none !important;
+        background-color: white !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        font-size: 10px !important;
+        box-sizing: border-box;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      .qr-box h3 {
+        font-size: 11px !important;
+        margin: 0 0 2px 0 !important;
+      }
+
+      .image-qr-row img,
+      .image-qr-row canvas {
+        width: 2cm !important;
+        height: 2cm !important;
+        object-fit: cover !important;
+        border-radius: 5px !important;
       }
     }
   </style>
@@ -188,6 +232,7 @@
     function copyBase64() {
       const text = document.getElementById("base64Result");
       text.select();
+      text.setSelectionRange(0, 99999);
       document.execCommand("copy");
       alert("✅ تم نسخ الكود!");
     }
@@ -242,15 +287,7 @@
         const workbook = XLSX.read(data, { type: 'array' });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
-        let page = null;
-        jsonData.forEach((record, index) => {
-          if (index % 16 === 0) {
-            page = document.createElement('div');
-            page.className = 'page';
-            document.getElementById('qr-container').appendChild(page);
-          }
-          page.appendChild(createQRBox(record));
-        });
+        jsonData.forEach(record => createQRBox(record));
       };
       reader.readAsArrayBuffer(file);
     });
@@ -258,6 +295,7 @@
     function createQRBox(data) {
       const name = data["الاسم"] || "";
       const image = data["الصورة"] || "";
+
       const info = `
 الاسم: ${data["الاسم"] || ""}
 نوع العمل: ${data["نوع العمل"] || ""}
@@ -291,11 +329,11 @@
       row.appendChild(canvas);
       box.appendChild(row);
 
+      document.getElementById('qr-container').appendChild(box);
+
       QRCode.toCanvas(canvas, info, function (error) {
         if (error) console.error("خطأ في توليد QR:", error);
       });
-
-      return box;
     }
   </script>
 </body>
