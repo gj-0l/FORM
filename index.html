@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>بطاقات فحص السلامة - QR</title>
+  <title>KCML KSD - QR Generator</title>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
@@ -17,6 +17,12 @@
     h2 {
       text-align: center;
       color: #15803d;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #065f46;
     }
 
     input, select, textarea {
@@ -41,8 +47,8 @@
     }
 
     .qr-box {
-      width: 6cm;
-      height: 6cm;
+      width: 5cm;
+      height: 5cm;
       background-color: white;
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -54,11 +60,11 @@
       align-items: center;
       justify-content: start;
       text-align: center;
-      font-size: 11px;
+      font-size: 10px;
     }
 
     .qr-box h3 {
-      font-size: 13px;
+      font-size: 11px;
       margin: 0;
       padding: 0;
       line-height: 1.1;
@@ -68,14 +74,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 4px;
-      margin-top: 4px;
+      gap: 2px;
+      margin-top: 2px;
     }
 
     .image-qr-row img,
     .image-qr-row canvas {
-      width: 2.5cm;
-      height: 2.5cm;
+      width: 2cm;
+      height: 2cm;
       border-radius: 5px;
       object-fit: cover;
     }
@@ -111,9 +117,9 @@
       }
 
       .qr-box {
-        width: 6cm !important;
-        height: 6cm !important;
-        padding: 0.4cm !important;
+        width: 5cm !important;
+        height: 5cm !important;
+        padding: 0.3cm !important;
         margin: 0 !important;
         border: none !important;
         background-color: white !important;
@@ -121,53 +127,124 @@
         flex-direction: column !important;
         justify-content: flex-start !important;
         align-items: center !important;
-        font-size: 11px !important;
+        font-size: 10px !important;
         box-sizing: border-box;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
       }
 
       .qr-box h3 {
-        font-size: 13px !important;
-        margin-bottom: 5px !important;
+        font-size: 11px !important;
+        margin: 0 0 2px 0 !important;
       }
 
-      .image-qr-row img,
+      .image-qr-row {
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 2px !important;
+        width: 100% !important;
+      }
+
+      .image-qr-row img {
+        display: inline-block !important;
+        width: 2cm !important;
+        height: 2cm !important;
+        object-fit: cover !important;
+        border-radius: 5px !important;
+      }
+
       .image-qr-row canvas {
-        width: 2.5cm !important;
-        height: 2.5cm !important;
+        width: 2cm !important;
+        height: 2cm !important;
+        object-fit: contain !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
       }
     }
   </style>
 </head>
 <body>
 
-  <h2>توليد بطاقات فحص السلامة (QR)</h2>
+  <h2>KCML KSD - فحص السلامة</h2>
 
   <div style="max-width: 600px; margin: auto;">
-    <h3>🔹 إدخال يدوي</h3>
-    <input type="text" id="name" placeholder="الاسم">
-    <input type="text" id="jobType" placeholder="نوع العمل">
-    <input type="date" id="testDate" placeholder="تأريخ الفحص">
-    <input type="file" id="photoInput" accept="image/*">
-    <button onclick="generateManualQR()">➕ توليد بطاقة</button>
+    <h3>1️⃣ تحويل صورة إلى Base64</h3>
+    <input type="file" id="convertBase64Input" accept="image/*">
+    <textarea id="base64Result" readonly placeholder="سيظهر هنا كود Base64. انسخه وضعه داخل ملف Excel."></textarea>
+    <button onclick="copyBase64()">📋 نسخ الكود</button>
   </div>
 
   <hr>
 
   <div style="max-width: 600px; margin: auto;">
-    <h3>📥 رفع ملف Excel</h3>
-    <input type="file" id="fileInput" accept=".xlsx" />
-    <button onclick="window.print()">🖨️ طباعة</button>
+    <h3>2️⃣ إدخال يدوي</h3>
+    <label>نوع الخط</label>
+    <select id="lineType"><option>KSD 1</option><option>KSD 2</option></select>
+    <label>الاسم</label><input type="text" id="name">
+    <label>اسم الشركة</label><input type="text" id="company">
+    <label>العمر</label><input type="number" id="age">
+    <label>تأريخ الفحص</label><input type="date" id="testDate">
+    <label>نوع الفحص</label>
+    <select id="testType">
+      <option>فحص العمل في المرتفعات</option>
+      <option>فحص المناطق الضيقة</option>
+      <option>فحص عادي</option>
+    </select>
+    <label>تأريخ تدريب السلامة</label><input type="date" id="trainingDate">
+    <label>نوع العمل</label><input type="text" id="jobType">
+    <label>رقم القفل</label><input type="text" id="lockNumber">
+    <label>رفع صورة</label><input type="file" id="photoInput" accept="image/*">
+    <button onclick="generateManualQR()">توليد رمز QR</button>
   </div>
 
   <hr>
+
+  <h2>3️⃣ رفع ملف Excel</h2>
+  <input type="file" id="fileInput" accept=".xlsx" />
+  <button onclick="window.print()">🖨️ طباعة الكل</button>
 
   <div id="qr-container"></div>
 
   <script>
     const fixedExpireDate = "2025-08-01";
     let uploadedImageData = "";
+
+    document.getElementById("convertBase64Input").addEventListener("change", function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          const maxSize = 150;
+          let width = img.width, height = img.height;
+          if (width > height) {
+            if (width > maxSize) { height *= maxSize / width; width = maxSize; }
+          } else {
+            if (height > maxSize) { width *= maxSize / height; height = maxSize; }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.6);
+          document.getElementById("base64Result").value = compressedBase64;
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function copyBase64() {
+      const text = document.getElementById("base64Result");
+      text.select();
+      text.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("✅ تم نسخ الكود!");
+    }
 
     document.getElementById('photoInput').addEventListener('change', function (event) {
       const file = event.target.files[0];
@@ -197,9 +274,15 @@
 
     function generateManualQR() {
       const data = {
+        "نوع الخط": document.getElementById('lineType').value,
         "الاسم": document.getElementById('name').value,
-        "نوع العمل": document.getElementById('jobType').value,
+        "اسم الشركة": document.getElementById('company').value,
+        "العمر": document.getElementById('age').value,
         "تأريخ الفحص": document.getElementById('testDate').value,
+        "نوع الفحص": document.getElementById('testType').value,
+        "تأريخ تدريب السلامة": document.getElementById('trainingDate').value,
+        "نوع العمل": document.getElementById('jobType').value,
+        "رقم القفل": document.getElementById('lockNumber').value,
         "الصورة": uploadedImageData
       };
       createQRBox(data);
@@ -220,14 +303,8 @@
 
     function createQRBox(data) {
       const name = data["الاسم"] || "";
-      const jobType = data["نوع العمل"] || "";
-      const testDate = data["تأريخ الفحص"] || "";
       const image = data["الصورة"] || "";
-
-      const info = `الاسم: ${name}
-نوع العمل: ${jobType}
-تأريخ الفحص: ${testDate}
-تأريخ الانتهاء: ${fixedExpireDate}`;
+      const info = `الاسم: ${name}\nنوع العمل: ${data["نوع العمل"] || ""}\nتأريخ الفحص: ${data["تأريخ الفحص"] || ""}\nتأريخ الانتهاء: ${fixedExpireDate}`;
 
       const box = document.createElement('div');
       box.className = 'qr-box';
@@ -252,7 +329,7 @@
       document.getElementById('qr-container').appendChild(box);
 
       QRCode.toCanvas(canvas, info, function (error) {
-        if (error) console.error("QR خطأ:", error);
+        if (error) console.error("خطأ في توليد QR:", error);
       });
     }
   </script>
