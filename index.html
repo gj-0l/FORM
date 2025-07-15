@@ -46,14 +46,25 @@
       cursor: pointer;
     }
 
+    #qr-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      justify-content: center;
+      align-items: center;
+      width: 21cm;
+      margin: auto;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     .qr-box {
       width: 5cm;
       height: 5cm;
       background-color: white;
       border: 1px solid #ccc;
       border-radius: 8px;
-      padding: 4px;
-      margin: 6px;
+      padding: 0.3cm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -61,13 +72,14 @@
       justify-content: start;
       text-align: center;
       font-size: 10px;
+      margin: 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
     .qr-box h3 {
       font-size: 11px;
-      margin: 0;
-      padding: 0;
-      line-height: 1.1;
+      margin: 0 0 2px 0;
     }
 
     .image-qr-row {
@@ -75,7 +87,7 @@
       justify-content: center;
       align-items: center;
       gap: 2px;
-      margin-top: 2px;
+      width: 100%;
     }
 
     .image-qr-row img,
@@ -84,12 +96,6 @@
       height: 2cm;
       border-radius: 5px;
       object-fit: cover;
-    }
-
-    #qr-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
     }
 
     @media print {
@@ -105,8 +111,8 @@
 
       #qr-container {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(4, auto);
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(5, auto);
         gap: 0;
         width: 100vw;
         height: 100vh;
@@ -138,29 +144,12 @@
         margin: 0 0 2px 0 !important;
       }
 
-      .image-qr-row {
-        flex-direction: row !important;
-        justify-content: center !important;
-        align-items: center !important;
-        gap: 2px !important;
-        width: 100% !important;
-      }
-
-      .image-qr-row img {
-        display: inline-block !important;
+      .image-qr-row img,
+      .image-qr-row canvas {
         width: 2cm !important;
         height: 2cm !important;
         object-fit: cover !important;
         border-radius: 5px !important;
-      }
-
-      .image-qr-row canvas {
-        width: 2cm !important;
-        height: 2cm !important;
-        object-fit: contain !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
       }
     }
   </style>
