@@ -2,339 +2,304 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KCML KSD - QR Generator</title>
+  <title>بطاقات الفحص</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
     body {
-      font-family: Tahoma, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       direction: rtl;
-      background-color: #f0fdf4;
-      padding: 20px;
-    }
-
-    h2 {
-      text-align: center;
-      color: #15803d;
-    }
-
-    label {
-      display: block;
-      margin-top: 10px;
-      color: #065f46;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
-
-    button {
-      margin-top: 15px;
-      background-color: #15803d;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      width: 100%;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    #qr-container {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.3cm;
-      justify-content: center;
-      align-items: center;
-      width: 21cm;
-      margin: auto;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    .qr-box {
-      width: 5cm;
-      height: 5cm;
-      background-color: white;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 0.3cm;
-      box-sizing: border-box;
+      background: #f0fdf4;
+      color: #1e4620;
+      margin: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: start;
+      min-height: 100vh;
+    }
+    main {
+      width: 100%;
+      max-width: 700px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    h2, h3 {
+      color: #2d6a4f;
+    }
+    form, .upload-section {
+      background: #d1fae5;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 10px #ccc;
+      width: 100%;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    .small-textarea {
+      height: 30px;
+      font-size: 12px;
+    }
+    button {
+      background-color: #2d6a4f;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin-top: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #1b4332;
+    }
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+    .card {
+      width: 280px;
+      background-color: #e6fffa;
+      border: 2px solid #95d5b2;
+      border-radius: 12px;
+      padding: 15px;
       text-align: center;
-      font-size: 10px;
-      margin: 0;
-      page-break-inside: avoid;
-      break-inside: avoid;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-
-    .qr-box h3 {
-      font-size: 11px;
-      margin: 0 0 2px 0;
+    .row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 10px;
+      width: 100%;
     }
-
-    .image-qr-row {
+    .card img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border: 1px solid #95d5b2;
+    }
+    .barcode {
+      width: 150px;
+      height: 150px;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 2px;
-      width: 100%;
+      border: 1px solid #95d5b2;
+      background: white;
     }
 
-    .image-qr-row img,
-    .image-qr-row canvas {
-      width: 2cm;
-      height: 2cm;
-      border-radius: 5px;
-      object-fit: cover;
-    }
-
+    /* ✅ إخفاء الفورم والأزرار عند الطباعة فقط */
     @media print {
-      body * {
-        visibility: hidden;
-        margin: 0;
-        padding: 0;
+      form,
+      .upload-section,
+      button,
+      h2,
+      h3 {
+        display: none !important;
       }
 
-      #qr-container, #qr-container * {
-        visibility: visible;
+      body {
+        background: white !important;
       }
 
-      #qr-container {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.3cm;
-        width: 100vw;
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        page-break-after: always;
-      }
-
-      .qr-box {
-        width: 5cm !important;
-        height: 5cm !important;
-        padding: 0.3cm !important;
-        margin: 0 !important;
-        border: none !important;
-        background-color: white !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: flex-start !important;
-        align-items: center !important;
-        font-size: 10px !important;
-        box-sizing: border-box;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-      }
-
-      .qr-box h3 {
-        font-size: 11px !important;
-        margin: 0 0 2px 0 !important;
-      }
-
-      .image-qr-row img,
-      .image-qr-row canvas {
-        width: 2cm !important;
-        height: 2cm !important;
-        object-fit: cover !important;
-        border-radius: 5px !important;
+      .card {
+        page-break-inside: avoid;
       }
     }
   </style>
 </head>
 <body>
 
-  <h2>KCML KSD - فحص السلامة</h2>
+<main>
+  
+    <h2>KCML KSD - فحص السلامة</h2>
 
-  <div style="max-width: 600px; margin: auto;">
-    <h3>1️⃣ تحويل صورة إلى Base64</h3>
-    <input type="file" id="convertBase64Input" accept="image/*">
-    <textarea id="base64Result" readonly placeholder="سيظهر هنا كود Base64. انسخه وضعه داخل ملف Excel."></textarea>
-    <button onclick="copyBase64()">📋 نسخ الكود</button>
+  <form id="dataForm" onsubmit="return false;">
+    <label>الاسم:</label><input type="text" id="name" required />
+    <label>نوع العمل:</label><input type="text" id="workType" />
+    <label>اسم الشركة:</label><input type="text" id="companyName" />
+    <label>العمر:</label><input type="number" id="age" />
+    <label>نوع الفحص:</label><input type="text" id="checkupType" />
+    <label>تاريخ الفحص الطبي:</label><input type="date" id="checkupDate" />
+    <label>تاريخ تدريب السلامة:</label><input type="date" id="safetyDate" />
+    <label>المهنة:</label><input type="text" id="jobTitle" />
+    <label>رقم القفل:</label><input type="text" id="lockNumber" />
+    <label>رفع صورة:</label>
+    <input type="file" id="imageInput" accept="image/*" />
+    <textarea id="base64Output" class="small-textarea" readonly placeholder="سيظهر رابط الصورة هنا"></textarea>
+    <button type="button" onclick="copyBase64()">نسخ الرابط</button>
+    <button type="button" onclick="generateCard()">إضافة بطاقة</button>
+  </form>
+
+  <h3>رفع ملف Excel:</h3>
+  <div class="upload-section">
+    <input type="file" id="excelFile" accept=".xlsx" />
   </div>
 
-  <hr>
+  <h3>البطاقات</h3>
+  <button onclick="printAll()">🖨️ طباعة الكل</button>
+  <div class="cards-container" id="cardsContainer"></div>
+</main>
 
-  <div style="max-width: 600px; margin: auto;">
-    <h3>2️⃣ إدخال يدوي</h3>
-    <label>نوع العمل</label>
-    <select id="lineType">
-      <option>صيانة الخط الأول</option>
-      <option>صيانة الخط الثاني</option>
-    </select>
+<script>
+  const expiryDate = new Date("2025-08-01");
 
-    <label>الاسم</label><input type="text" id="name">
-    <label>اسم الشركة</label><input type="text" id="company">
-    <label>العمر</label><input type="number" id="age">
-    <label>تأريخ الفحص طبي</label><input type="date" id="testDate">
-    <label>نوع الفحص</label>
-    <select id="testType">
-      <option>فحص كامل</option>
-      <option>فحص عادي</option>
-    </select>
-    <label>تأريخ تدريب السلامة</label><input type="date" id="trainingDate">
-    <label>المهنة</label><input type="text" id="jobType">
-    <label>رقم القفل</label><input type="text" id="lockNumber">
-    <label>رفع صورة</label><input type="file" id="photoInput" accept="image/*">
-    <button onclick="generateManualQR()">توليد رمز QR</button>
-  </div>
+  function copyBase64() {
+    const textarea = document.getElementById("base64Output");
+    textarea.select();
+    document.execCommand("copy");
+    alert("تم نسخ الرابط");
+  }
 
-  <hr>
-
-  <h2>3️⃣ رفع ملف Excel</h2>
-  <input type="file" id="fileInput" accept=".xlsx" />
-  <button onclick="window.print()">🖨️ طباعة الكل</button>
-
-  <div id="qr-container"></div>
-
-  <script>
-    const fixedExpireDate = "2025-08-01";
-    let uploadedImageData = "";
-
-    document.getElementById("convertBase64Input").addEventListener("change", function (e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        const img = new Image();
-        img.onload = function () {
-          const canvas = document.createElement("canvas");
-          const maxSize = 150;
-          let width = img.width, height = img.height;
-          if (width > height) {
-            if (width > maxSize) { height *= maxSize / width; width = maxSize; }
-          } else {
-            if (height > maxSize) { width *= maxSize / height; height = maxSize; }
-          }
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, width, height);
-          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.6);
-          document.getElementById("base64Result").value = compressedBase64;
-        };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
-
-    function copyBase64() {
-      const text = document.getElementById("base64Result");
-      text.select();
-      text.setSelectionRange(0, 99999);
-      document.execCommand("copy");
-      alert("✅ تم نسخ الكود!");
-    }
-
-    document.getElementById('photoInput').addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      if (!file) return;
+  document.getElementById("imageInput").addEventListener("change", function () {
+    const file = this.files[0];
+    if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
-        const img = new Image();
-        img.onload = function () {
-          const canvas = document.createElement("canvas");
-          const maxSize = 150;
-          let width = img.width, height = img.height;
-          if (width > height) {
-            if (width > maxSize) { height *= maxSize / width; width = maxSize; }
-          } else {
-            if (height > maxSize) { width *= maxSize / height; height = maxSize; }
-          }
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, width, height);
-          uploadedImageData = canvas.toDataURL("image/jpeg", 0.6);
-        };
-        img.src = e.target.result;
+        document.getElementById("base64Output").value = e.target.result;
       };
       reader.readAsDataURL(file);
-    });
+    }
+  });
 
-    function generateManualQR() {
-      const data = {
-        "نوع العمل": document.getElementById('lineType').value,
-        "الاسم": document.getElementById('name').value,
-        "اسم الشركة": document.getElementById('company').value,
-        "العمر": document.getElementById('age').value,
-        "تأريخ الفحص طبي": document.getElementById('testDate').value,
-        "نوع الفحص": document.getElementById('testType').value,
-        "تأريخ تدريب السلامة": document.getElementById('trainingDate').value,
-        "المهنة": document.getElementById('jobType').value,
-        "رقم القفل": document.getElementById('lockNumber').value,
-        "الصورة": uploadedImageData
+  function buildArabicQR(data) {
+    return `🔹 الاسم: ${data.name}
+🔹 نوع العمل: ${data.workType}
+🔹 اسم الشركة: ${data.companyName}
+🔹 العمر: ${data.age}
+🔹 نوع الفحص: ${data.checkupType}
+🔹 تاريخ الفحص الطبي: ${data.checkupDate || "غير محدد"}
+🔹 تاريخ تدريب السلامة: ${data.safetyDate || "غير محدد"}
+🔹 المهنة: ${data.jobTitle}
+🔹 رقم القفل: ${data.lockNumber}
+🔹 تاريخ الانتهاء: 2025-08-01;`;
+  }
+
+  function generateCard(dataFromExcel = null) {
+    const now = new Date();
+    const expired = now >= expiryDate;
+    let data = {};
+
+    if (dataFromExcel) {
+      data = dataFromExcel;
+    } else {
+      data = {
+        name: document.getElementById("name").value.trim(),
+        workType: document.getElementById("workType").value.trim(),
+        companyName: document.getElementById("companyName").value.trim(),
+        age: document.getElementById("age").value.trim(),
+        checkupType: document.getElementById("checkupType").value.trim(),
+        checkupDate: document.getElementById("checkupDate").value.trim(),
+        safetyDate: document.getElementById("safetyDate").value.trim(),
+        jobTitle: document.getElementById("jobTitle").value.trim(),
+        lockNumber: document.getElementById("lockNumber").value.trim(),
+        imageBase64: document.getElementById("base64Output").value.trim()
       };
-      createQRBox(data);
     }
 
-    document.getElementById('fileInput').addEventListener('change', function (e) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-        jsonData.forEach(record => createQRBox(record));
-      };
-      reader.readAsArrayBuffer(file);
-    });
+    if (!data.name) {
+      alert("الرجاء تعبئة حقل الاسم");
+      return;
+    }
 
-    function createQRBox(data) {
-      const name = data["الاسم"] || "";
-      const image = data["الصورة"] || "";
+    const card = document.createElement("div");
+    card.className = "card";
 
-      const info = Object.entries({
-        "الاسم": data["الاسم"],
-        "نوع العمل": data["نوع العمل"],
-        "اسم الشركة": data["اسم الشركة"],
-        "العمر": data["العمر"],
-        "نوع الفحص": data["نوع الفحص"],
-        "تأريخ الفحص طبي": data["تأريخ الفحص طبي"],
-        "تأريخ تدريب السلامة": data["تأريخ تدريب السلامة"],
-        "المهنة": data["المهنة"],
-        "رقم القفل": data["رقم القفل"],
-        "تأريخ الانتهاء": fixedExpireDate
-      }).map(([k, v]) => `${k}: ${v || ""}`).join("\n");
+    const nameEl = document.createElement("h4");
+    nameEl.innerText = data.name;
+    card.appendChild(nameEl);
 
-      const box = document.createElement('div');
-      box.className = 'qr-box';
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "row";
 
-      const title = document.createElement('h3');
-      title.textContent = name;
-      box.appendChild(title);
+    const img = document.createElement("img");
+    img.src = data.imageBase64 || "";
+    img.alt = "صورة المستخدم";
+    rowDiv.appendChild(img);
 
-      const row = document.createElement('div');
-      row.className = 'image-qr-row';
+    const qrDiv = document.createElement("div");
+    qrDiv.className = "barcode";
 
-      if (image) {
-        const img = document.createElement('img');
-        img.src = image;
-        row.appendChild(img);
-      }
+    const qrCanvas = document.createElement("canvas");
 
-      const canvas = document.createElement('canvas');
-      row.appendChild(canvas);
-      box.appendChild(row);
-
-      document.getElementById('qr-container').appendChild(box);
-
-      QRCode.toCanvas(canvas, info, function (error) {
-        if (error) console.error("خطأ في توليد QR:", error);
+    if (!expired) {
+      const textQR = buildArabicQR(data);
+      QRCode.toCanvas(qrCanvas, textQR, { width: 150, margin: 3 }, function (error) {
+        if (error) {
+          console.error("خطأ في توليد الباركود:", error);
+          qrDiv.innerHTML = "<b style='color:red'>خطأ في توليد الباركود</b>";
+        }
       });
+      qrDiv.appendChild(qrCanvas);
+    } else {
+      qrDiv.innerHTML = "<b style='color:red'>انتهت صلاحية الباركود</b>";
     }
-  </script>
+
+    rowDiv.appendChild(qrDiv);
+    card.appendChild(rowDiv);
+
+    const btnPrint = document.createElement("button");
+    btnPrint.textContent = "🖨️ طباعة";
+    btnPrint.onclick = () => {
+      window.print();
+    };
+    card.appendChild(btnPrint);
+
+    document.getElementById("cardsContainer").appendChild(card);
+  }
+
+  document.getElementById("excelFile").addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return alert("الرجاء اختيار ملف Excel");
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { raw: false });
+
+      rows.forEach(row => {
+        const data = {
+          name: row["الاسم"] || "",
+          workType: row["نوع العمل"] || "",
+          companyName: row["اسم الشركة"] || "",
+          age: row["العمر"] || "",
+          checkupType: row["نوع الفحص"] || "",
+          checkupDate: row["تاريخ الفحص الطبي"] || "",
+          safetyDate: row["تاريخ تدريب السلامة"] || "",
+          jobTitle: row["المهنة"] || "",
+          lockNumber: row["رقم القفل"] || "",
+          imageBase64: row["الصورة"] || ""
+        };
+        generateCard(data);
+      });
+    };
+    reader.readAsArrayBuffer(file);
+  });
+
+  function printAll() {
+    window.print();
+  }
+</script>
+
 </body>
 </html>
