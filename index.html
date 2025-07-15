@@ -169,18 +169,23 @@
 
   <div style="max-width: 600px; margin: auto;">
     <h3>2️⃣ إدخال يدوي</h3>
-    <label>نوع الخط</label><select id="lineType"><option>KSD 1</option><option>KSD 2</option></select>
+    <label>نوع العمل</label>
+    <select id="lineType">
+      <option>صيانة الخط الأول</option>
+      <option>صيانة الخط الثاني</option>
+    </select>
+
     <label>الاسم</label><input type="text" id="name">
     <label>اسم الشركة</label><input type="text" id="company">
     <label>العمر</label><input type="number" id="age">
-    <label>تأريخ الفحص</label><input type="date" id="testDate">
-    <label>نوع الفحص</label><select id="testType">
-      <option>فحص العمل في المرتفعات</option>
-      <option>فحص المناطق الضيقة</option>
+    <label>تأريخ الفحص طبي</label><input type="date" id="testDate">
+    <label>نوع الفحص</label>
+    <select id="testType">
+      <option>فحص كامل</option>
       <option>فحص عادي</option>
     </select>
     <label>تأريخ تدريب السلامة</label><input type="date" id="trainingDate">
-    <label>نوع العمل</label><input type="text" id="jobType">
+    <label>المهنة</label><input type="text" id="jobType">
     <label>رقم القفل</label><input type="text" id="lockNumber">
     <label>رفع صورة</label><input type="file" id="photoInput" accept="image/*">
     <button onclick="generateManualQR()">توليد رمز QR</button>
@@ -261,14 +266,14 @@
 
     function generateManualQR() {
       const data = {
-        "نوع الخط": document.getElementById('lineType').value,
+        "نوع العمل": document.getElementById('lineType').value,
         "الاسم": document.getElementById('name').value,
         "اسم الشركة": document.getElementById('company').value,
         "العمر": document.getElementById('age').value,
-        "تأريخ الفحص": document.getElementById('testDate').value,
+        "تأريخ الفحص طبي": document.getElementById('testDate').value,
         "نوع الفحص": document.getElementById('testType').value,
         "تأريخ تدريب السلامة": document.getElementById('trainingDate').value,
-        "نوع العمل": document.getElementById('jobType').value,
+        "المهنة": document.getElementById('jobType').value,
         "رقم القفل": document.getElementById('lockNumber').value,
         "الصورة": uploadedImageData
       };
@@ -294,13 +299,13 @@
 
       const info = `
 الاسم: ${data["الاسم"] || ""}
-نوع الخط: ${data["نوع الخط"] || ""}
+نوع العمل: ${data["نوع العمل"] || ""}
 اسم الشركة: ${data["اسم الشركة"] || ""}
 العمر: ${data["العمر"] || ""}
 نوع الفحص: ${data["نوع الفحص"] || ""}
-تأريخ الفحص: ${data["تأريخ الفحص"] || ""}
+تأريخ الفحص طبي: ${data["تأريخ الفحص طبي"] || ""}
 تأريخ تدريب السلامة: ${data["تأريخ تدريب السلامة"] || ""}
-نوع العمل: ${data["نوع العمل"] || ""}
+المهنة: ${data["المهنة"] || ""}
 رقم القفل: ${data["رقم القفل"] || ""}
 تأريخ الانتهاء: ${fixedExpireDate}
 `.trim();
