@@ -107,7 +107,6 @@
       background: white;
     }
 
-    /* ✅ إخفاء الفورم والأزرار عند الطباعة فقط */
     @media print {
       form,
       .upload-section,
@@ -130,8 +129,7 @@
 <body>
 
 <main>
-  
-    <h2>KCML KSD - فحص السلامة</h2>
+  <h2>KCML KSD - فحص السلامة</h2>
 
   <form id="dataForm" onsubmit="return false;">
     <label>الاسم:</label><input type="text" id="name" required />
@@ -173,9 +171,22 @@
   document.getElementById("imageInput").addEventListener("change", function () {
     const file = this.files[0];
     if (file) {
+      const img = new Image();
       const reader = new FileReader();
       reader.onload = function (e) {
-        document.getElementById("base64Output").value = e.target.result;
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          const MAX_SIZE = 150;
+          canvas.width = MAX_SIZE;
+          canvas.height = MAX_SIZE;
+
+          ctx.drawImage(img, 0, 0, MAX_SIZE, MAX_SIZE);
+          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.7);
+          document.getElementById("base64Output").value = compressedBase64;
+        };
+        img.src = e.target.result;
       };
       reader.readAsDataURL(file);
     }
